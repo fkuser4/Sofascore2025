@@ -4,7 +4,6 @@
 //
 //  Created by Filip Kušer on 09.03.2025..
 //
-
 import UIKit
 import SnapKit
 import SofaAcademic
@@ -79,7 +78,6 @@ class MainViewController: UIViewController {
         let laLiga = homeworkDataSource.laLigaLeague()
         
         leagues.append(laLiga)
- 
     }
     
     private func getEvents(){

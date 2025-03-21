@@ -24,12 +24,14 @@ class EventViewModel {
         event.awayTeam.name
     }
 
-    var homeTeamLogoURL: String {
-        event.homeTeam.logoUrl ?? ""
+    var homeTeamLogoURL: URL? {
+        guard let urlString = event.homeTeam.logoUrl else { return nil }
+        return URL(string: urlString)
     }
 
-    var awayTeamLogoURL: String {
-        event.awayTeam.logoUrl ?? ""
+    var awayTeamLogoURL: URL? {
+        guard let urlString = event.awayTeam.logoUrl else { return nil }
+        return URL(string: urlString)
     }
 
     var homeScore: String {
@@ -93,13 +95,13 @@ class EventViewModel {
         case .inProgress:
             return .eventLive
         case .finished:
-            guard let home = event.homeScore, let away = event.awayScore else {
+            guard let homeScore = event.homeScore, let awayScore = event.awayScore else {
                 return .primary
             }
-            if home == away {
+            if homeScore == awayScore {
                 return .primary
             }
-            let homeWon = home > away
+            let homeWon = homeScore > awayScore
             return (homeWon == isHome) ? .primary : .secondary
         case .notStarted, .halftime:
             return .clear
@@ -109,13 +111,13 @@ class EventViewModel {
     private func teamTextColor(isHomeTeam: Bool) -> UIColor {
         switch event.status {
         case .finished:
-            guard let home = event.homeScore, let away = event.awayScore else {
+            guard let homeScore = event.homeScore, let awayScore = event.awayScore else {
                 return .primary
             }
-            if home == away {
+            if homeScore == awayScore {
                 return .primary
             }
-            let homeWon = home > away
+            let homeWon = homeScore > awayScore
             return (homeWon == isHomeTeam) ? .primary : .secondary
         case .inProgress, .notStarted, .halftime:
             return .primary

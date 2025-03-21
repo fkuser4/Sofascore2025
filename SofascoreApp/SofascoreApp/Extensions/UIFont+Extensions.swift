@@ -6,7 +6,7 @@
 //
 import UIKit
 
-struct Fonts {
+struct Font {
     static func regular(size: CGFloat) -> UIFont {
         return UIFont(name: "Roboto-Regular", size: size) ?? UIFont.systemFont(ofSize: size)
     }
@@ -18,10 +18,4 @@ struct Fonts {
     static func light(size: CGFloat) -> UIFont {
         return UIFont(name: "Roboto-Light", size: size) ?? UIFont.systemFont(ofSize: size, weight: .light)
     }
-}
-
-extension UIFont {
-    static let primaryTitle = Fonts.bold(size: 14)
-    static let bodyRegular = Fonts.regular(size: 14)
-    static let bodyLight = Fonts.regular(size: 12)
 }

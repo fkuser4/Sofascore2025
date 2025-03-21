@@ -1,8 +1,8 @@
 //
-//  UIColor+Extensions.swift
+//  UIColor+Hex.swift
 //  SofascoreApp
 //
-//  Created by Filip Kušer on 16.03.2025..
+//  Created by Filip Kušer on 21.03.2025..
 //
 import UIKit
 
@@ -20,8 +20,4 @@ extension UIColor {
         
         self.init(red: r, green: g, blue: b, alpha: 1.0)
     }
-    
-    static let eventLive = UIColor(hex: "#E93030")
-    static let primary = UIColor(hex: "#121212")
-    static let secondary = UIColor.primary.withAlphaComponent(0.4)
 }

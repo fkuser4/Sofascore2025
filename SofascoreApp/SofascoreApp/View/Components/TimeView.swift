@@ -4,15 +4,14 @@
 //
 //  Created by Filip Kušer on 17.03.2025..
 //
-
 import SofaAcademic
 import UIKit
 import SnapKit
 
 class TimeView: BaseView {
     
-    private let statusLabel = UILabel()
-    private let timeLabel = UILabel()
+    private let statusLabel: UILabel = .init()
+    private let timeLabel: UILabel = .init()
     
     func configure(matchTime: String, statusText: String, statusTextColor: UIColor) {
             timeLabel.text = matchTime

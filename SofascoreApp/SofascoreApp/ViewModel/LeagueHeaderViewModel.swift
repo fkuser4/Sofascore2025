@@ -4,7 +4,6 @@
 //
 //  Created by Filip Kušer on 16.03.2025..
 //
-
 import Foundation
 import SofaAcademic
 
@@ -23,11 +22,8 @@ class LeagueHeaderViewModel {
         league.country?.name ?? "Unknown"
     }
 
-    var logoUrlString: String {
-        league.logoUrl ?? ""
-    }
-
-    var hasLogo: Bool {
-        league.logoUrl != nil
+    var logoURL: URL? {
+        guard let urlString = league.logoUrl else { return nil }
+        return URL(string: urlString)
     }
 }
