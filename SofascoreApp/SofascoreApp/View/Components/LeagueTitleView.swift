@@ -4,7 +4,6 @@
 //
 //  Created by Filip Kušer on 16.03.2025..
 //
-
 import SofaAcademic
 import UIKit
 import SnapKit
@@ -31,6 +30,8 @@ class LeagueTitleView: BaseView {
         countryLabel.font = .primaryTitle
         countryLabel.textColor = .primary
         countryLabel.lineBreakMode = .byTruncatingTail
+        countryLabel.setContentHuggingPriority(.required, for: .horizontal)
+        countryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         leagueNameLabel.font = .primaryTitle
         leagueNameLabel.textColor = .secondary
@@ -41,21 +42,18 @@ class LeagueTitleView: BaseView {
 
     override func setupConstraints() {
         countryLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.centerY.equalToSuperview()
+            $0.leading.height.equalToSuperview()
         }
         
         arrowImageView.snp.makeConstraints {
-            $0.height.equalTo(25)
-            $0.width.equalTo(20)
+            $0.width.equalTo(24)
             $0.leading.equalTo(countryLabel.snp.trailing)
-            $0.centerY.equalToSuperview()
+            $0.height.equalToSuperview()
         }
         
         leagueNameLabel.snp.makeConstraints {
             $0.leading.equalTo(arrowImageView.snp.trailing)
-            $0.trailing.lessThanOrEqualToSuperview().inset(15)
-            $0.centerY.equalToSuperview()
+            $0.trailing.height.equalToSuperview()
         }
     }
 }

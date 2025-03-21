@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 
 class EventView : BaseView {
+    
     private let homeTeam: TeamView = .init()
     private let awayTeam: TeamView = .init()
     private let timeView: TimeView = .init()
@@ -18,7 +19,6 @@ class EventView : BaseView {
     private let leftBorderView: UIView = .init()
     
     func configure(with eventViewModel: EventViewModel) {
-        
         homeScore.text = eventViewModel.homeScore
         awayScore.text = eventViewModel.awayScore
         homeScore.textColor = eventViewModel.homeScoreTextColor
@@ -44,11 +44,13 @@ class EventView : BaseView {
         homeScore.font = .bodyRegular
         awayScore.font = .bodyRegular
         
+        homeScore.textAlignment = .right
+        awayScore.textAlignment = .right
+        
         leftBorderView.backgroundColor = .secondary
     }
 
     override func setupConstraints() {
-        
         timeView.snp.makeConstraints { make in
             make.top.leading.height.equalToSuperview()
             make.width.equalTo(64)
@@ -63,28 +65,26 @@ class EventView : BaseView {
         
         homeTeam.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalTo(timeView.snp.trailing)
-            make.height.equalToSuperview().multipliedBy(0.5).offset(-10)
+            make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
+            make.width.equalTo(192)
         }
         
         awayTeam.snp.makeConstraints { make in
-            make.leading.equalTo(timeView.snp.trailing)
-            make.height.equalToSuperview().multipliedBy(0.5).offset(-10)
-            make.top.equalTo(homeTeam.snp.bottom)
+            make.bottom.equalToSuperview().inset(10)
+            make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
+            make.width.equalTo(192)
         }
-        
+
         homeScore.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.width.equalTo(30)
-            make.trailing.equalToSuperview()
-            make.centerY.equalTo(homeTeam)
+            make.top.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().inset(16)
+            make.width.equalTo(32)
         }
         
         awayScore.snp.makeConstraints { make in
-            make.top.equalTo(homeTeam.snp.bottom)
-            make.width.equalTo(30)
-            make.trailing.equalToSuperview()
-            make.centerY.equalTo(awayTeam)
+            make.bottom.equalToSuperview().inset(10)
+            make.trailing.equalToSuperview().inset(16)
+            make.width.equalTo(32)
         }
     }
 }

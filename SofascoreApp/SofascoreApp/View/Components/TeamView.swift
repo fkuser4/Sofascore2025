@@ -4,7 +4,6 @@
 //
 //  Created by Filip Kušer on 17.03.2025..
 //
-
 import UIKit
 import SofaAcademic
 import SnapKit
@@ -27,16 +26,14 @@ class TeamView: BaseView {
 
     override func setupConstraints() {
         teamLogoImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
-            make.centerY.equalToSuperview()
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+            make.leading.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.width.height.equalTo(16)
         }
         
         teamNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(teamLogoImageView.snp.trailing).offset(12)
-            make.centerY.equalToSuperview()
-            make.trailing.lessThanOrEqualToSuperview().inset(16)
+            make.leading.equalTo(teamLogoImageView.snp.trailing).offset(8)
+            make.top.bottom.trailing.equalToSuperview()
         }
     }
 

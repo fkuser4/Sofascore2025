@@ -27,23 +27,24 @@ class TimeView: BaseView {
 
     override func styleViews() {
         statusLabel.font = .bodyLight
+        statusLabel.textAlignment = .center
         timeLabel.font = .bodyLight
         timeLabel.textColor = .secondary
+        timeLabel.textAlignment = .center
+        
     }
 
     override func setupConstraints() {
         timeLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.centerX.equalToSuperview()
-            make.width.lessThanOrEqualToSuperview()
-            make.height.equalTo(16)
+            make.leading.equalToSuperview().offset(4)
+            make.trailing.equalToSuperview().inset(4)
         }
         
         statusLabel.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(4)
-            make.centerX.equalToSuperview()
-            make.width.lessThanOrEqualToSuperview()
-            make.height.equalTo(16)
+            make.leading.equalToSuperview().offset(4)
+            make.trailing.equalToSuperview().inset(4)
         }
     }
 }

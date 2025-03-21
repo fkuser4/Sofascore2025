@@ -7,6 +7,7 @@
 import UIKit
 
 struct Font {
+    
     static func regular(size: CGFloat) -> UIFont {
         return UIFont(name: "Roboto-Regular", size: size) ?? UIFont.systemFont(ofSize: size)
     }
