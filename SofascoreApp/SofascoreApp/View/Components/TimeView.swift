@@ -14,10 +14,10 @@ class TimeView: BaseView {
     private let timeLabel: UILabel = .init()
     
     func configure(matchTime: String, statusText: String, statusTextColor: UIColor) {
-            timeLabel.text = matchTime
+        timeLabel.text = matchTime
             
-            statusLabel.text = statusText
-            statusLabel.textColor = statusTextColor
+        statusLabel.text = statusText
+        statusLabel.textColor = statusTextColor
     }
     
     override func addViews() {
