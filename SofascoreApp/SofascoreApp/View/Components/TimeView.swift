@@ -16,7 +16,6 @@ class TimeView: BaseView {
     
     func configure(matchTime: String, statusText: String, statusTextColor: UIColor) {
             timeLabel.text = matchTime
-            timeLabel.textColor = Colors.textSecondary
             
             statusLabel.text = statusText
             statusLabel.textColor = statusTextColor
@@ -28,31 +27,24 @@ class TimeView: BaseView {
     }
 
     override func styleViews() {
-        statusLabel.font = Fonts.regular(size: 12)
-        timeLabel.font = Fonts.regular(size: 12)
+        statusLabel.font = .bodyLight
+        timeLabel.font = .bodyLight
+        timeLabel.textColor = .secondary
     }
 
     override func setupConstraints() {
         timeLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview().offset(-6)
+            make.top.equalToSuperview().offset(10)
+            make.centerX.equalToSuperview()
             make.width.lessThanOrEqualToSuperview()
-            make.height.equalToSuperview().dividedBy(2)
+            make.height.equalTo(16)
         }
         
         statusLabel.snp.makeConstraints { make in
-            make.top.equalTo(timeLabel.snp.bottom)
-            make.centerX.equalToSuperview().offset(-6)
+            make.top.equalTo(timeLabel.snp.bottom).offset(4)
+            make.centerX.equalToSuperview()
             make.width.lessThanOrEqualToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
+            make.height.equalTo(16)
         }
-    }
-
-    override func setupGestureRecognizers() {
-            // Configure gesture recognizers
-    }
-
-    override func setupBinding() {
-            // Set up bindings
     }
 }

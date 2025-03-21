@@ -1,10 +1,9 @@
 //
-//  Fonts.swift
+//  UIFont+Extensions.swift.swift
 //  SofascoreApp
 //
-//  Created by Filip Kušer on 16.03.2025..
+//  Created by Filip Kušer on 21.03.2025..
 //
-
 import UIKit
 
 struct Fonts {
@@ -19,4 +18,10 @@ struct Fonts {
     static func light(size: CGFloat) -> UIFont {
         return UIFont(name: "Roboto-Light", size: size) ?? UIFont.systemFont(ofSize: size, weight: .light)
     }
+}
+
+extension UIFont {
+    static let primaryTitle = Fonts.bold(size: 14)
+    static let bodyRegular = Fonts.regular(size: 14)
+    static let bodyLight = Fonts.regular(size: 12)
 }

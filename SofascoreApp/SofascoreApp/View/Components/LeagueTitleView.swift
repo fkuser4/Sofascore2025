@@ -18,7 +18,7 @@ class LeagueTitleView: BaseView {
     func configure(leagueName: String, country: String){
         countryLabel.text = country
         leagueNameLabel.text = leagueName
-        arrowImageView.image = UIImage(named: "arrowRight")?.withRenderingMode(.alwaysTemplate)
+        arrowImageView.image = .icPointerRight
     }
     
     override func addViews() {
@@ -28,44 +28,34 @@ class LeagueTitleView: BaseView {
     }
 
     override func styleViews() {
-        countryLabel.font = Fonts.bold(size: 14)
-        countryLabel.textColor = Colors.textPrimary
-        countryLabel.numberOfLines = 1
+        countryLabel.font = .primaryTitle
+        countryLabel.textColor = .primary
         countryLabel.lineBreakMode = .byTruncatingTail
 
-        leagueNameLabel.font = Fonts.bold(size: 14)
-        leagueNameLabel.textColor = Colors.textSecondary
-        leagueNameLabel.numberOfLines = 1
+        leagueNameLabel.font = .primaryTitle
+        leagueNameLabel.textColor = .secondary
         leagueNameLabel.lineBreakMode = .byTruncatingTail
         
-        arrowImageView.tintColor = Colors.textSecondary
-    
+        arrowImageView.tintColor = .secondary
     }
 
     override func setupConstraints() {
         countryLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(26)
+            $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
         
         arrowImageView.snp.makeConstraints {
-            $0.width.height.equalTo(10)
-            $0.leading.equalTo(countryLabel.snp.trailing).offset(8)
+            $0.height.equalTo(25)
+            $0.width.equalTo(20)
+            $0.leading.equalTo(countryLabel.snp.trailing)
             $0.centerY.equalToSuperview()
         }
         
         leagueNameLabel.snp.makeConstraints {
-            $0.leading.equalTo(arrowImageView.snp.trailing).offset(8)
+            $0.leading.equalTo(arrowImageView.snp.trailing)
             $0.trailing.lessThanOrEqualToSuperview().inset(15)
             $0.centerY.equalToSuperview()
         }
-    }
-
-    override func setupGestureRecognizers() {
-            // Configure gesture recognizers
-    }
-
-    override func setupBinding() {
-            // Set up bindings
     }
 }
