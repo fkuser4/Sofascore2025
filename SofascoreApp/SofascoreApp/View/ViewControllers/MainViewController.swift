@@ -8,69 +8,119 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-class MainViewController: UIViewController {
-  private var leagues: [League] = []
-  private var eventsMap: [String: [Event]] = [:]
+final class MainViewController: UIViewController {
 
-  private var homeworkDataSource = Homework2DataSource()
+    private let sportSelectorView = SportSelectorView()
+    private let underlineTrackView = UIView()
+    private let underlineView = UIView()
+    private let containerView = UIView()
+    private let sportViewModel = SportSelectorViewModel()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .white
+    private lazy var footballVC: FootballEventsViewController = FootballEventsViewController()
+    private lazy var basketballVC: BasketballEventsViewController = BasketballEventsViewController()
+    private lazy var americanFootballVC: AmericanFootballEventsViewController = AmericanFootballEventsViewController()
 
-    getLeagues()
-    getEvents()
-    setupUI()
-  }
+    private var currentChildVC: UIViewController?
 
-  private func setupUI() {
-    for league in leagues {
-      let leagueHeaderViewModel = LeagueHeaderViewModel(league: league)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
 
-      let leagueHeaderView = LeagueHeaderView()
-      leagueHeaderView.configure(with: leagueHeaderViewModel)
+        setupSubviews()
+        setupConstraints()
+        setupStyles()
+        setupBindings()
 
-      view.addSubview(leagueHeaderView)
-
-      leagueHeaderView.snp.makeConstraints {
-        $0.leading.trailing.equalTo(view)
-        $0.top.equalTo(view.safeAreaLayoutGuide)
-      }
-
-      let eventsStackView = UIStackView()
-      eventsStackView.axis = .vertical
-      eventsStackView.alignment = .fill
-      eventsStackView.distribution = .fillEqually
-
-      view.addSubview(eventsStackView)
-
-      if var events = eventsMap[league.name] {
-        events.sort { $0.startTimestamp < $1.startTimestamp }
-
-        for event in events {
-          let eventViewModel = EventViewModel(event: event)
-          let eventView = EventView()
-          eventView.configure(with: eventViewModel)
-          eventsStackView.addArrangedSubview(eventView)
-        }
-
-        eventsStackView.snp.makeConstraints {
-          $0.top.equalTo(leagueHeaderView.snp.bottom)
-          $0.leading.trailing.equalToSuperview()
-        }
-      }
+        sportViewModel.viewDidLoad()
+        switchToChildViewController(newVC: footballVC)
     }
-  }
 
-  private func getLeagues() {
-    let laLiga = homeworkDataSource.laLigaLeague()
+    private func setupSubviews() {
+        view.addSubview(sportSelectorView)
+        view.addSubview(underlineTrackView)
+        underlineTrackView.addSubview(underlineView)
+        view.addSubview(containerView)
+    }
 
-    leagues.append(laLiga)
-  }
+    private func setupConstraints() {
+        sportSelectorView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(44)
+        }
 
-  private func getEvents() {
-    let laLigaEvents = homeworkDataSource.laLigaEvents()
+        underlineTrackView.snp.makeConstraints {
+            $0.top.equalTo(sportSelectorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(4)
+        }
 
-    eventsMap["La Liga"] = laLigaEvents
-  }
+        underlineView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.width.equalTo(104)
+            $0.centerX.equalToSuperview()
+        }
+
+        containerView.snp.makeConstraints {
+            $0.top.equalTo(underlineTrackView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+
+    private func setupStyles() {
+        underlineTrackView.backgroundColor = .sportSelectorBackground
+
+        underlineView.backgroundColor = .sportSelectorText
+        underlineView.layer.cornerRadius = 2
+        underlineView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        underlineView.clipsToBounds = true
+        underlineView.isUserInteractionEnabled = false
+    }
+
+    private func setupBindings() {
+        sportSelectorView.configure(with: SportType.allCases)
+        sportSelectorView.onTap = { [weak self] sport in
+            self?.sportViewModel.didSelect(sport)
+            self?.switchToSport(sport: sport)
+        }
+
+        sportViewModel.onUpdate = { [weak self] data in
+            self?.underlineView.snp.updateConstraints {
+                $0.centerX.equalToSuperview().offset(data.underlineCenterOffset)
+            }
+            UIView.animate(withDuration: 0.25) {
+                self?.view.layoutIfNeeded()
+            }
+        }
+    }
+
+    private func switchToSport(sport: SportType) {
+        switch sport {
+        case .football:
+            switchToChildViewController(newVC: footballVC)
+        case .basketball:
+            switchToChildViewController(newVC: basketballVC)
+        case .americanFootball:
+            switchToChildViewController(newVC: americanFootballVC)
+        }
+    }
+
+    private func switchToChildViewController(newVC: UIViewController) {
+        if let currentVC = currentChildVC {
+            currentVC.willMove(toParent: nil)
+            currentVC.view.removeFromSuperview()
+            currentVC.removeFromParent()
+        }
+
+        addChild(newVC)
+        containerView.addSubview(newVC.view)
+
+        newVC.view.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
+        newVC.didMove(toParent: self)
+
+        currentChildVC = newVC
+    }
 }
