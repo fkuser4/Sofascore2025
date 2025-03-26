@@ -32,6 +32,7 @@ class EventView: BaseView {
       teamLogoUrl: eventViewModel.awayTeamLogoURL,
       teamName: eventViewModel.awayTeamName,
       textColor: eventViewModel.awayTeamTextColor)
+
     timeView.configure(
       matchTime: eventViewModel.matchStartTime,
       statusText: eventViewModel.matchStatusText,
