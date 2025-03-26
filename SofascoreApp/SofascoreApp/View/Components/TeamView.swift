@@ -9,38 +9,38 @@ import SofaAcademic
 import SnapKit
 
 class TeamView: BaseView {
-    
-    private var teamLogoImageView: UIImageView = .init()
-    private var teamNameLabel: UILabel = .init()
-    
-    func configure(teamLogoUrl: URL?, teamName: String, textColor: UIColor){
-        teamLogoImageView.loadImage(from: teamLogoUrl)
-        teamNameLabel.text = teamName
-        teamNameLabel.textColor = textColor
-    }
-    
-    override func addViews() {
-        addSubview(teamLogoImageView)
-        addSubview(teamNameLabel)
+  private var teamLogoImageView: UIImageView = .init()
+  private var teamNameLabel: UILabel = .init()
+
+  func configure(teamLogoUrl: URL?, teamName: String, textColor: UIColor) {
+    teamLogoImageView.loadImage(from: teamLogoUrl)
+
+    teamNameLabel.text = teamName
+    teamNameLabel.textColor = textColor
+  }
+
+  override func addViews() {
+    addSubview(teamLogoImageView)
+    addSubview(teamNameLabel)
+  }
+
+  override func setupConstraints() {
+    teamLogoImageView.snp.makeConstraints { make in
+      make.leading.equalToSuperview()
+      make.top.bottom.equalToSuperview()
+      make.width.height.equalTo(16)
     }
 
-    override func setupConstraints() {
-        teamLogoImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.bottom.equalToSuperview()
-            make.width.height.equalTo(16)
-        }
-        
-        teamNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(teamLogoImageView.snp.trailing).offset(8)
-            make.top.bottom.trailing.equalToSuperview()
-        }
+    teamNameLabel.snp.makeConstraints { make in
+      make.leading.equalTo(teamLogoImageView.snp.trailing).offset(8)
+      make.top.bottom.trailing.equalToSuperview()
     }
+  }
 
-    override func styleViews() {
-        teamLogoImageView.contentMode = .scaleAspectFit
-        
-        teamNameLabel.font = .bodyRegular
-        teamNameLabel.lineBreakMode = .byTruncatingTail
-    }
+  override func styleViews() {
+    teamLogoImageView.contentMode = .scaleAspectFit
+
+    teamNameLabel.font = .bodyRegular
+    teamNameLabel.lineBreakMode = .byTruncatingTail
+  }
 }

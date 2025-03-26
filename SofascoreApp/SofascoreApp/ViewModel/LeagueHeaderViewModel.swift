@@ -8,22 +8,21 @@ import Foundation
 import SofaAcademic
 
 class LeagueHeaderViewModel {
-    private let league: League
+  private let league: League
 
-    init(league: League) {
-        self.league = league
-    }
+  init(league: League) {
+    self.league = league
+  }
 
-    var leagueName: String {
-        league.name
-    }
+  var leagueName: String {
+    league.name
+  }
 
-    var countryName: String {
-        league.country?.name ?? "Unknown"
-    }
+  var countryName: String {
+    league.country?.name ?? "Unknown"
+  }
 
-    var logoURL: URL? {
-        guard let urlString = league.logoUrl else { return nil }
-        return URL(string: urlString)
-    }
+  var logoURL: URL? {
+    return league.logoUrl?.url
+  }
 }
