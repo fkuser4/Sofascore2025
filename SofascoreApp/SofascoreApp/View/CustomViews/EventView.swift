@@ -32,7 +32,6 @@ class EventView: BaseView {
       teamLogoUrl: eventViewModel.awayTeamLogoURL,
       teamName: eventViewModel.awayTeamName,
       textColor: eventViewModel.awayTeamTextColor)
-
     timeView.configure(
       matchTime: eventViewModel.matchStartTime,
       statusText: eventViewModel.matchStatusText,
@@ -60,7 +59,7 @@ class EventView: BaseView {
 
   override func setupConstraints() {
     timeView.snp.makeConstraints { make in
-      make.top.leading.height.equalToSuperview()
+      make.top.leading.bottom.equalToSuperview()
       make.width.equalTo(64)
     }
 
@@ -72,27 +71,25 @@ class EventView: BaseView {
     }
 
     homeTeam.snp.makeConstraints { make in
-      make.top.equalToSuperview().offset(10)
+      make.top.equalToSuperview().inset(10)
       make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
-      make.width.equalTo(192)
+      make.trailing.equalTo(homeScore.snp.leading).offset(12)
     }
 
     awayTeam.snp.makeConstraints { make in
       make.bottom.equalToSuperview().inset(10)
       make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
-      make.width.equalTo(192)
+      make.trailing.equalTo(awayScore.snp.leading).offset(12)
     }
 
     homeScore.snp.makeConstraints { make in
-      make.top.equalToSuperview().offset(10)
+      make.centerY.equalTo(homeTeam)
       make.trailing.equalToSuperview().inset(16)
-      make.width.equalTo(32)
     }
 
     awayScore.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().inset(10)
+      make.centerY.equalTo(awayTeam)
       make.trailing.equalToSuperview().inset(16)
-      make.width.equalTo(32)
     }
   }
 }

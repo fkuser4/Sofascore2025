@@ -41,18 +41,24 @@ class LeagueTitleView: BaseView {
 
   override func setupConstraints() {
     countryLabel.snp.makeConstraints {
-      $0.leading.height.equalToSuperview()
+      $0.leading.equalToSuperview()
+      $0.top.greaterThanOrEqualToSuperview()
+      $0.bottom.lessThanOrEqualToSuperview()
+      $0.centerY.equalTo(arrowImageView)
     }
 
     arrowImageView.snp.makeConstraints {
-      $0.width.equalTo(24)
+      $0.size.equalTo(24)
       $0.leading.equalTo(countryLabel.snp.trailing)
-      $0.height.equalToSuperview()
+      $0.top.bottom.equalToSuperview()
     }
 
     leagueNameLabel.snp.makeConstraints {
       $0.leading.equalTo(arrowImageView.snp.trailing)
-      $0.trailing.height.equalToSuperview()
+      $0.top.greaterThanOrEqualToSuperview()
+      $0.bottom.lessThanOrEqualToSuperview()
+      $0.centerY.equalTo(arrowImageView)
+      $0.trailing.equalToSuperview()
     }
   }
 }

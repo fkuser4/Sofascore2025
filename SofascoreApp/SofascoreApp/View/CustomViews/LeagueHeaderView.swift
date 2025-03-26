@@ -24,16 +24,14 @@ class LeagueHeaderView: BaseView {
 
   override func setupConstraints() {
     leagueLogoImageView.snp.makeConstraints {
-      $0.top.equalToSuperview().inset(12)
+      $0.size.equalTo(32)
+      $0.top.bottom.equalToSuperview().inset(12)
       $0.leading.equalToSuperview().offset(16)
-      $0.width.height.equalTo(32)
     }
 
     leagueTitleView.snp.makeConstraints {
-      $0.top.equalToSuperview().offset(16)
       $0.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
-      $0.width.equalTo(151)
-      $0.height.equalTo(24)
+      $0.centerY.equalTo(leagueLogoImageView)
     }
   }
 }

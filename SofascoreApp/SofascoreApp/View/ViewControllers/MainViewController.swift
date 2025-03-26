@@ -35,7 +35,6 @@ class MainViewController: UIViewController {
       leagueHeaderView.snp.makeConstraints {
         $0.leading.trailing.equalTo(view)
         $0.top.equalTo(view.safeAreaLayoutGuide)
-        $0.height.equalTo(56)
       }
 
       let eventsStackView = UIStackView()
@@ -57,8 +56,7 @@ class MainViewController: UIViewController {
 
         eventsStackView.snp.makeConstraints {
           $0.top.equalTo(leagueHeaderView.snp.bottom)
-          $0.leading.trailing.equalTo(view)
-          $0.height.equalTo(56 * events.count)
+          $0.leading.trailing.equalToSuperview()
         }
       }
     }

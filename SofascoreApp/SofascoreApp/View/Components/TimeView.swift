@@ -35,15 +35,14 @@ class TimeView: BaseView {
 
   override func setupConstraints() {
     timeLabel.snp.makeConstraints { make in
-      make.top.equalToSuperview().offset(10)
-      make.leading.equalToSuperview().offset(4)
-      make.trailing.equalToSuperview().inset(4)
+      make.top.equalToSuperview().inset(10)
+      make.centerX.equalToSuperview()
     }
 
     statusLabel.snp.makeConstraints { make in
       make.top.equalTo(timeLabel.snp.bottom).offset(4)
-      make.leading.equalToSuperview().offset(4)
-      make.trailing.equalToSuperview().inset(4)
+      make.centerX.equalToSuperview()
+      make.bottom.equalToSuperview().inset(10)
     }
   }
 }
