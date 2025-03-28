@@ -52,35 +52,37 @@ class EventView: BaseView {
     homeScore.font = .bodyRegular
     awayScore.font = .bodyRegular
 
-    homeScore.textAlignment = .right
-    awayScore.textAlignment = .right
+    homeScore.setContentCompressionResistancePriority(.required, for: .horizontal)
+    awayScore.setContentCompressionResistancePriority(.required, for: .horizontal)
 
     leftBorderView.backgroundColor = .secondary
   }
 
   override func setupConstraints() {
     timeView.snp.makeConstraints { make in
-      make.top.leading.bottom.equalToSuperview()
+      make.top.equalTo(homeTeam)
+      make.leading.equalToSuperview()
+      make.bottom.equalTo(awayTeam)
       make.width.equalTo(64)
     }
 
     leftBorderView.snp.makeConstraints { make in
       make.leading.equalTo(timeView.snp.trailing)
-      make.height.equalTo(40)
-      make.centerY.equalToSuperview()
+      make.top.bottom.equalToSuperview().inset(8)
       make.width.equalTo(1)
     }
 
     homeTeam.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(10)
       make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
-      make.trailing.equalTo(homeScore.snp.leading).offset(12)
+      make.trailing.lessThanOrEqualTo(homeScore.snp.leading).offset(-16)
     }
 
     awayTeam.snp.makeConstraints { make in
       make.bottom.equalToSuperview().inset(10)
+      make.top.equalTo(homeTeam.snp.bottom).offset(4)
       make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
-      make.trailing.equalTo(awayScore.snp.leading).offset(12)
+      make.trailing.lessThanOrEqualTo(awayScore.snp.leading).offset(-16)
     }
 
     homeScore.snp.makeConstraints { make in

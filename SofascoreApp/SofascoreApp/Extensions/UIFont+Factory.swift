@@ -7,15 +7,17 @@
 import UIKit
 
 extension UIFont {
+  // swiftlint:disable force_unwrapping
   static func regular(size: CGFloat) -> UIFont {
-    return UIFont(name: "Roboto-Regular", size: size) ?? UIFont.systemFont(ofSize: size)
+    return UIFont(name: "Roboto-Regular", size: size)!
   }
 
   static func bold(size: CGFloat) -> UIFont {
-    return UIFont(name: "Roboto-Bold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+    return UIFont(name: "Roboto-Bold", size: size)!
   }
 
   static func light(size: CGFloat) -> UIFont {
-    return UIFont(name: "Roboto-Light", size: size) ?? UIFont.systemFont(ofSize: size, weight: .light)
+    return UIFont(name: "Roboto-Light", size: size)!
   }
+  // swiftlint:enable force_unwrapping
 }

@@ -35,6 +35,7 @@ class TeamView: BaseView {
       make.leading.equalTo(teamLogoImageView.snp.trailing).offset(8)
       make.top.greaterThanOrEqualToSuperview()
       make.bottom.lessThanOrEqualToSuperview()
+      make.trailing.equalToSuperview()
     }
   }
 
