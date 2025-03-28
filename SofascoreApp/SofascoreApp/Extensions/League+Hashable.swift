@@ -7,12 +7,13 @@
 import Foundation
 import SofaAcademic
 
-extension League: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    public static func == (lhs: League, rhs: League) -> Bool {
-        return lhs.id == rhs.id
-    }
+extension League: @retroactive Equatable {}
+extension League: @retroactive Hashable {
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+
+  public static func == (lhs: League, rhs: League) -> Bool {
+    return lhs.id == rhs.id
+  }
 }
