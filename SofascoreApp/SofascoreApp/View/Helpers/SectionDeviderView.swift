@@ -8,10 +8,18 @@ import UIKit
 
 final class SectionDividerView: UICollectionReusableView {
   static let reuseIdentifier = "SectionDivider"
+  let line = UIView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = .secondary
+
+    line.backgroundColor = .secondary
+    addSubview(line)
+    line.snp.makeConstraints { make in
+      make.top.equalToSuperview().inset(7)
+      make.leading.trailing.bottom.equalToSuperview()
+      make.height.equalTo(1)
+    }
   }
 
   required init?(coder: NSCoder) {

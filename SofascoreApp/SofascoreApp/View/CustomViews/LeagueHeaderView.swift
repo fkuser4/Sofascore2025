@@ -13,6 +13,7 @@ class LeagueHeaderView: BaseView {
   private var leagueTitleView: LeagueTitleView = .init()
 
   func configure(with leagueHeaderViewModel: LeagueHeaderViewModel) {
+    leagueLogoImageView.image = nil
     leagueLogoImageView.loadImage(from: leagueHeaderViewModel.logoURL)
     leagueTitleView.configure(leagueName: leagueHeaderViewModel.leagueName, country: leagueHeaderViewModel.countryName)
   }

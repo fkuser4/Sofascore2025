@@ -13,7 +13,8 @@ class SportSelectorView: BaseView {
 
   private let stackView: UIStackView = .init()
   private var buttons: [SportSelectorButton] = []
-
+  private let underlineTrackView = UIView()
+  private let underlineView = UIView()
 
   func configure(with sports: [SportType]) {
     for sport in sports {
@@ -24,10 +25,20 @@ class SportSelectorView: BaseView {
       stackView.addArrangedSubview(button)
       buttons.append(button)
     }
+
+    guard let firstButton = buttons.first else { return }
+
+    underlineView.snp.makeConstraints {
+      $0.top.bottom.equalToSuperview()
+      $0.leading.equalTo(firstButton.snp.leading).offset(8)
+      $0.trailing.equalTo(firstButton.snp.trailing).offset(-8)
+    }
   }
 
   override func addViews() {
     addSubview(stackView)
+    addSubview(underlineTrackView)
+    underlineTrackView.addSubview(underlineView)
   }
 
   override func styleViews() {
@@ -36,16 +47,43 @@ class SportSelectorView: BaseView {
     stackView.alignment = .fill
     stackView.spacing = 0
     stackView.backgroundColor = .sportSelectorBackground
+
+    underlineTrackView.backgroundColor = .sportSelectorBackground
+
+    underlineView.backgroundColor = .sportSelectorText
+    underlineView.layer.cornerRadius = 2
+    underlineView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    underlineView.clipsToBounds = true
+    underlineView.isUserInteractionEnabled = false
   }
 
   override func setupConstraints() {
     stackView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.trailing.leading.equalToSuperview()
+    }
+
+    underlineTrackView.snp.makeConstraints {
+      $0.height.equalTo(4)
+      $0.top.equalTo(stackView.snp.bottom)
+      $0.bottom.equalToSuperview()
+      $0.leading.trailing.equalToSuperview()
     }
   }
 
   @objc private func buttonTapped(_ sender: UIControl) {
-    guard let sport = SportType(rawValue: sender.tag) else { return }
+    guard let sport = SportType(rawValue: sender.tag),
+      let selectedButton = sender as? SportSelectorButton else { return }
+
+    underlineView.snp.remakeConstraints {
+      $0.top.bottom.equalToSuperview()
+      $0.leading.equalTo(selectedButton.snp.leading).offset(8)
+      $0.trailing.equalTo(selectedButton.snp.trailing).offset(-8)
+    }
+
+    UIView.animate(withDuration: 0.25) {
+      self.layoutIfNeeded()
+    }
+
     onTap?(sport)
   }
 }

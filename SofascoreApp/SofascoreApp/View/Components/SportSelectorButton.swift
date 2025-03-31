@@ -39,9 +39,9 @@ final class SportSelectorButton: UIControl {
     titleLabel.textColor = .sportSelectorText
 
     iconImageView.snp.makeConstraints {
+      $0.size.equalTo(16)
       $0.top.equalToSuperview().offset(4)
       $0.centerX.equalToSuperview()
-      $0.width.height.equalTo(16)
     }
 
     titleLabel.snp.makeConstraints {
