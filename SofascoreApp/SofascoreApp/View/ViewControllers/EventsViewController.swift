@@ -8,11 +8,24 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-final class EventsViewController: UIViewController {
-  private let viewModel: MainViewModel
-  private var collectionView: UICollectionView!
+final class EventsViewController: UIViewController, BaseViewProtocol {
+  public var viewModel: EventsViewModel {
+    didSet {
+      DispatchQueue.main.async {
+        self.collectionView.backgroundView?.isHidden = !self.viewModel.displayedLeagues.isEmpty
+        UIView.performWithoutAnimation {
+          self.collectionView.reloadData()
+        }
+      }
+    }
+  }
+  private lazy var collectionView: UICollectionView = {
+    let layout = createCompositionalLayout()
+    return UICollectionView(frame: .zero, collectionViewLayout: layout)
+  }()
+  private let emptyStateView = EmptyStateView()
 
-  init(viewModel: MainViewModel) {
+  init(viewModel: EventsViewModel) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -25,10 +38,32 @@ final class EventsViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .white
 
-    let layout = createCompositionalLayout()
-    collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    collectionView.backgroundColor = .white
+    setupCollectionView()
+    addViews()
+    styleViews()
+    setupConstraints()
 
+    collectionView.backgroundView?.isHidden = !viewModel.displayedLeagues.isEmpty
+    collectionView.reloadData()
+  }
+
+  func addViews() {
+    view.addSubview(collectionView)
+    collectionView.backgroundView = emptyStateView
+  }
+
+  func styleViews() {
+    collectionView.backgroundColor = .white
+    emptyStateView.setMessageText("No events available for this sport.")
+  }
+
+  func setupConstraints() {
+    collectionView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
+  }
+
+  private func setupCollectionView() {
     collectionView.register(
       EventCollectionViewCell.self,
       forCellWithReuseIdentifier: EventCollectionViewCell.reuseIdentifier)
@@ -44,36 +79,6 @@ final class EventsViewController: UIViewController {
       withReuseIdentifier: SectionDividerView.reuseIdentifier)
 
     collectionView.dataSource = self
-
-    setupSubviews()
-    setupConstraints()
-    setupBinding()
-  }
-
-  private func setupBinding() {
-    viewModel.bindToData = { [weak self] in
-      guard let self = self else { return }
-      DispatchQueue.main.async {
-        if self.viewModel.leagues.isEmpty {
-          self.collectionView.backgroundView = EmptyStateView(message: "No events available for this sport.")
-        } else {
-          self.collectionView.backgroundView = nil
-        }
-        UIView.performWithoutAnimation {
-          self.collectionView.reloadData()
-        }
-      }
-    }
-  }
-
-  private func setupSubviews() {
-    view.addSubview(collectionView)
-  }
-
-  private func setupConstraints() {
-    collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
   }
 
   private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
@@ -85,12 +90,12 @@ final class EventsViewController: UIViewController {
 
 extension EventsViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return viewModel.leagues.count
+    return viewModel.displayedLeagues.count
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    let league = viewModel.leagues[section]
-    return viewModel.events(for: league).count
+    let league = viewModel.displayedLeagues[section]
+    return viewModel.currentEvents[league]?.count ?? 0
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -101,8 +106,11 @@ extension EventsViewController: UICollectionViewDataSource {
       return UICollectionViewCell()
     }
 
-    let league = viewModel.leagues[indexPath.section]
-    let events = viewModel.events(for: league)
+    let league = viewModel.displayedLeagues[indexPath.section]
+    guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
+      return cell
+    }
+
     let event = events[indexPath.item]
     cell.configure(with: EventViewModel(event: event))
     return cell
@@ -118,7 +126,7 @@ extension EventsViewController: UICollectionViewDataSource {
         return UICollectionReusableView()
       }
 
-      let league = viewModel.leagues[indexPath.section]
+      let league = viewModel.displayedLeagues[indexPath.section]
       headerView.configure(with: LeagueHeaderViewModel(league: league))
       return headerView
     } else if kind == UICollectionView.elementKindSectionFooter {

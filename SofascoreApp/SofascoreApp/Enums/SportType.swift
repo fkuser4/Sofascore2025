@@ -24,8 +24,4 @@ enum SportType: Int, CaseIterable {
     case .americanFootball: return "ic_american_football"
     }
   }
-
-  var index: Int {
-    Self.allCases.firstIndex(of: self) ?? 0
-  }
 }

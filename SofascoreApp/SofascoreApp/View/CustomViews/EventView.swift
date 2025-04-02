@@ -17,26 +17,34 @@ class EventView: BaseView {
   private var awayScore = UILabel()
   private let leftBorderView: UIView = .init()
 
-  func configure(with eventViewModel: EventViewModel) {
-    homeScore.text = eventViewModel.homeScore
-    awayScore.text = eventViewModel.awayScore
-    homeScore.textColor = eventViewModel.homeScoreTextColor
-    awayScore.textColor = eventViewModel.awayScoreTextColor
+  func configure(with eventViewModel: EventViewModel?) {
+    if let eventViewModel = eventViewModel {
+      homeScore.text = eventViewModel.homeScore
+      awayScore.text = eventViewModel.awayScore
+      homeScore.textColor = eventViewModel.homeScoreTextColor
+      awayScore.textColor = eventViewModel.awayScoreTextColor
 
-    homeTeam.configure(
-      teamLogoUrl: eventViewModel.homeTeamLogoURL,
-      teamName: eventViewModel.homeTeamName,
-      textColor: eventViewModel.homeTeamTextColor)
+      homeTeam.configure(
+        teamLogoUrl: eventViewModel.homeTeamLogoURL,
+        teamName: eventViewModel.homeTeamName,
+        textColor: eventViewModel.homeTeamTextColor)
 
-    awayTeam.configure(
-      teamLogoUrl: eventViewModel.awayTeamLogoURL,
-      teamName: eventViewModel.awayTeamName,
-      textColor: eventViewModel.awayTeamTextColor)
+      awayTeam.configure(
+        teamLogoUrl: eventViewModel.awayTeamLogoURL,
+        teamName: eventViewModel.awayTeamName,
+        textColor: eventViewModel.awayTeamTextColor)
 
-    timeView.configure(
-      matchTime: eventViewModel.matchStartTime,
-      statusText: eventViewModel.matchStatusText,
-      statusTextColor: eventViewModel.timeTextColor)
+      timeView.configure(
+        matchTime: eventViewModel.matchStartTime,
+        statusText: eventViewModel.matchStatusText,
+        statusTextColor: eventViewModel.timeTextColor)
+    } else {
+      homeScore.text = ""
+      awayScore.text = ""
+      homeTeam.configure(teamLogoUrl: nil, teamName: "", textColor: .label)
+      awayTeam.configure(teamLogoUrl: nil, teamName: "", textColor: .label)
+      timeView.configure(matchTime: "", statusText: "", statusTextColor: .label)
+    }
   }
 
   override func addViews() {

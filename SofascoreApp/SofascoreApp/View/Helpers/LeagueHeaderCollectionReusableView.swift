@@ -27,4 +27,9 @@ final class LeagueHeaderCollectionReusableView: UICollectionReusableView {
   func configure(with viewModel: LeagueHeaderViewModel) {
     leagueHeaderView.configure(with: viewModel)
   }
+
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    leagueHeaderView.configure(with: nil)
+  }
 }

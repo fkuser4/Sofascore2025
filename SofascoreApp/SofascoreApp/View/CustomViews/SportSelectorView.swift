@@ -17,11 +17,18 @@ class SportSelectorView: BaseView {
   private let underlineView = UIView()
 
   func configure(with sports: [SportType]) {
+    for view in stackView.arrangedSubviews {
+      stackView.removeArrangedSubview(view)
+      view.removeFromSuperview()
+    }
+
     for sport in sports {
       let icon = UIImage(named: sport.iconName)
       let button = SportSelectorButton(icon: icon, title: sport.title)
-      button.tag = sport.rawValue
-      button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+      button.onTap = { [weak self] in
+        self?.updateUnderlineView(for: button)
+        self?.onTap?(sport)
+      }
       stackView.addArrangedSubview(button)
       buttons.append(button)
     }
@@ -70,20 +77,15 @@ class SportSelectorView: BaseView {
     }
   }
 
-  @objc private func buttonTapped(_ sender: UIControl) {
-    guard let sport = SportType(rawValue: sender.tag),
-      let selectedButton = sender as? SportSelectorButton else { return }
-
+  private func updateUnderlineView(for button: UIView) {
     underlineView.snp.remakeConstraints {
       $0.top.bottom.equalToSuperview()
-      $0.leading.equalTo(selectedButton.snp.leading).offset(8)
-      $0.trailing.equalTo(selectedButton.snp.trailing).offset(-8)
+      $0.leading.equalTo(button.snp.leading).offset(8)
+      $0.trailing.equalTo(button.snp.trailing).offset(-8)
     }
 
     UIView.animate(withDuration: 0.25) {
       self.layoutIfNeeded()
     }
-
-    onTap?(sport)
   }
 }

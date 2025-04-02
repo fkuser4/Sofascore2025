@@ -8,12 +8,13 @@ import UIKit
 import SnapKit
 
 final class SportSelectorButton: UIControl {
+  public var onTap: (() -> Void)?
   private let iconImageView = UIImageView()
   private let titleLabel = UILabel()
 
   init(icon: UIImage?, title: String) {
     super.init(frame: .zero)
-
+    self.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     guard let icon = icon else {
       return
     }
@@ -23,6 +24,10 @@ final class SportSelectorButton: UIControl {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  @objc private func buttonTapped() {
+    onTap?()
   }
 
   private func setup(icon: UIImage, title: String) {

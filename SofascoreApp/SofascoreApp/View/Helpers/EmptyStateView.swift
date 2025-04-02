@@ -6,29 +6,29 @@
 //
 import UIKit
 import SnapKit
+import SofaAcademic
 
-final class EmptyStateView: UIView {
+final class EmptyStateView: BaseView {
   private let messageLabel = UILabel()
 
-  init(message: String) {
-    super.init(frame: .zero)
-    setup(message: message)
+  public func setMessageText(_ text: String?) {
+    if let text = text {
+      messageLabel.text = text
+    }
   }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  private func setup(message: String) {
+  override func addViews() {
     addSubview(messageLabel)
-    messageLabel.text = message
-    messageLabel.textColor = .secondary
-    messageLabel.font = .bodyRegular
-    messageLabel.textAlignment = .center
+  }
 
+  override func setupConstraints() {
     messageLabel.snp.makeConstraints {
       $0.center.equalToSuperview()
       $0.leading.trailing.equalToSuperview().inset(32)
     }
+  }
+  override func styleViews() {
+    messageLabel.textColor = .secondary
+    messageLabel.font = .bodyRegular
+    messageLabel.textAlignment = .center
   }
 }

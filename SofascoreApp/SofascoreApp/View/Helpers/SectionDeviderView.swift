@@ -8,7 +8,7 @@ import UIKit
 
 final class SectionDividerView: UICollectionReusableView {
   static let reuseIdentifier = "SectionDivider"
-  let line = UIView()
+  private let line = UIView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)

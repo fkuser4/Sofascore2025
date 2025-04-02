@@ -26,4 +26,9 @@ final class EventCollectionViewCell: UICollectionViewCell {
   func configure(with viewModel: EventViewModel) {
     eventView.configure(with: viewModel)
   }
+
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    eventView.configure(with: nil)
+  }
 }

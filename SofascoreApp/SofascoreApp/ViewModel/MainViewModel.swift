@@ -7,45 +7,21 @@
 import SofaAcademic
 
 class MainViewModel {
-  public var bindToData: (() -> Void)?
-
-  private var allEvents: [Event] = [] {
-    didSet { bindToData?() }
-  }
-
-  private var currentEvents: [League: [Event]] = [:] {
-    didSet { bindToData?() }
-  }
-
-  private var displayedLeagues: [League] = [] {
-    didSet { bindToData?() }
-  }
-
   private let dataSource = Homework3DataSource()
+  private var eventsViewModelMap: [SportType: EventsViewModel] = [:]
 
-  public func tabChange(to: SportType) {
-    switch to {
-    case .football:
-      setFootballEvents()
-    case .basketball:
-      setBasketballEvents()
-    case .americanFootball:
-      setAmericanFootballEvents()
-    }
+  init() {
+    setupEventsViewModelMap()
   }
 
-  public var leagues: [League] {
-    return displayedLeagues
+  public func eventsViewModel(for sportType: SportType) -> EventsViewModel? {
+    return eventsViewModelMap[sportType]
   }
 
-  public func events(for league: League) -> [Event] {
-    return currentEvents[league] ?? []
-  }
-
-  private func setFootballEvents() {
-    allEvents = dataSource.events()
-    currentEvents = [:]
-    displayedLeagues = []
+  private func getFootballEventsViewModel() -> EventsViewModel {
+    let allEvents = dataSource.events()
+    var currentEvents: [League: [Event]] = [:]
+    var displayedLeagues: [League] = []
 
     for event in allEvents {
       guard let league = event.league else { continue }
@@ -59,17 +35,22 @@ class MainViewModel {
     }
 
     displayedLeagues.sort { $0.name < $1.name }
+
+    return EventsViewModel(allEvents: allEvents, currentEvents: currentEvents, displayedLeagues: displayedLeagues)
   }
 
-  private func setBasketballEvents() {
-    allEvents = []
-    currentEvents = [:]
-    displayedLeagues = []
+  private func getBasketballEventsViewModel() -> EventsViewModel {
+    return EventsViewModel(allEvents: [], currentEvents: [:], displayedLeagues: [])
   }
 
-  private func setAmericanFootballEvents() {
-    allEvents = []
-    currentEvents = [:]
-    displayedLeagues = []
+  private func getAmericanFootballEventsViewModel() -> EventsViewModel {
+    return EventsViewModel(allEvents: [], currentEvents: [:], displayedLeagues: [])
+  }
+
+
+  private func setupEventsViewModelMap() {
+    eventsViewModelMap[.football] = getFootballEventsViewModel()
+    eventsViewModelMap[.basketball] = getBasketballEventsViewModel()
+    eventsViewModelMap[.americanFootball] = getAmericanFootballEventsViewModel()
   }
 }
