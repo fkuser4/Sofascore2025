@@ -12,7 +12,7 @@ class TimeView: BaseView {
   private let statusLabel: UILabel = .init()
   private let timeLabel: UILabel = .init()
 
-  func configure(matchTime: String, statusText: String, statusTextColor: UIColor) {
+  func configure(matchTime: String?, statusText: String?, statusTextColor: UIColor?) {
     timeLabel.text = matchTime
 
     statusLabel.text = statusText

@@ -20,7 +20,7 @@ class LeagueHeaderView: BaseView {
         country: leagueHeaderViewModel.countryName)
     } else {
       leagueLogoImageView.image = nil
-      leagueTitleView.configure(leagueName: "", country: "")
+      leagueTitleView.configure(leagueName: nil, country: nil)
     }
   }
 

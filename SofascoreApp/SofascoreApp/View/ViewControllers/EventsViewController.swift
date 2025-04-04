@@ -11,19 +11,16 @@ import SofaAcademic
 final class EventsViewController: UIViewController, BaseViewProtocol {
   public var viewModel: EventsViewModel {
     didSet {
-      DispatchQueue.main.async {
-        self.collectionView.backgroundView?.isHidden = !self.viewModel.displayedLeagues.isEmpty
-        UIView.performWithoutAnimation {
-          self.collectionView.reloadData()
-        }
-      }
+      self.collectionView.backgroundView?.isHidden = !self.viewModel.displayedLeagues.isEmpty
+      self.collectionView.reloadData()
     }
   }
+  private let emptyStateView = EmptyStateView()
+
   private lazy var collectionView: UICollectionView = {
     let layout = createCompositionalLayout()
     return UICollectionView(frame: .zero, collectionViewLayout: layout)
   }()
-  private let emptyStateView = EmptyStateView()
 
   init(viewModel: EventsViewModel) {
     self.viewModel = viewModel

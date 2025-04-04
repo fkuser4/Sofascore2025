@@ -39,11 +39,11 @@ class EventView: BaseView {
         statusText: eventViewModel.matchStatusText,
         statusTextColor: eventViewModel.timeTextColor)
     } else {
-      homeScore.text = ""
-      awayScore.text = ""
-      homeTeam.configure(teamLogoUrl: nil, teamName: "", textColor: .label)
-      awayTeam.configure(teamLogoUrl: nil, teamName: "", textColor: .label)
-      timeView.configure(matchTime: "", statusText: "", statusTextColor: .label)
+      homeScore.text = nil
+      awayScore.text = nil
+      homeTeam.configure(teamLogoUrl: nil, teamName: nil, textColor: nil)
+      awayTeam.configure(teamLogoUrl: nil, teamName: nil, textColor: nil)
+      timeView.configure(matchTime: nil, statusText: nil, statusTextColor: nil)
     }
   }
 

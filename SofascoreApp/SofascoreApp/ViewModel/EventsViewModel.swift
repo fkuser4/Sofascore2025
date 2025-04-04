@@ -7,12 +7,10 @@
 import SofaAcademic
 
 class EventsViewModel {
-  var allEvents: [Event] = []
   var currentEvents: [League: [Event]] = [:]
   var displayedLeagues: [League] = []
 
-  init(allEvents: [Event], currentEvents: [League: [Event]], displayedLeagues: [League]) {
-    self.allEvents = allEvents
+  init(currentEvents: [League: [Event]], displayedLeagues: [League]) {
     self.currentEvents = currentEvents
     self.displayedLeagues = displayedLeagues
   }

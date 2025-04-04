@@ -16,7 +16,7 @@ class SportSelectorView: BaseView {
   private let underlineTrackView = UIView()
   private let underlineView = UIView()
 
-  func configure(with sports: [SportType]) {
+  func configure(with sports: [SportType], selectedSport: SportType) {
     for view in stackView.arrangedSubviews {
       stackView.removeArrangedSubview(view)
       view.removeFromSuperview()
@@ -31,14 +31,14 @@ class SportSelectorView: BaseView {
       }
       stackView.addArrangedSubview(button)
       buttons.append(button)
-    }
 
-    guard let firstButton = buttons.first else { return }
-
-    underlineView.snp.makeConstraints {
-      $0.top.bottom.equalToSuperview()
-      $0.leading.equalTo(firstButton.snp.leading).offset(8)
-      $0.trailing.equalTo(firstButton.snp.trailing).offset(-8)
+      if sport.title == selectedSport.title {
+        underlineView.snp.makeConstraints {
+          $0.top.bottom.equalToSuperview()
+          $0.leading.equalTo(button.snp.leading).offset(8)
+          $0.trailing.equalTo(button.snp.trailing).offset(-8)
+        }
+      }
     }
   }
 

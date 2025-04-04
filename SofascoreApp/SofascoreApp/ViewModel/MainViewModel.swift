@@ -36,17 +36,16 @@ class MainViewModel {
 
     displayedLeagues.sort { $0.name < $1.name }
 
-    return EventsViewModel(allEvents: allEvents, currentEvents: currentEvents, displayedLeagues: displayedLeagues)
+    return EventsViewModel(currentEvents: currentEvents, displayedLeagues: displayedLeagues)
   }
 
   private func getBasketballEventsViewModel() -> EventsViewModel {
-    return EventsViewModel(allEvents: [], currentEvents: [:], displayedLeagues: [])
+    return EventsViewModel(currentEvents: [:], displayedLeagues: [])
   }
 
   private func getAmericanFootballEventsViewModel() -> EventsViewModel {
-    return EventsViewModel(allEvents: [], currentEvents: [:], displayedLeagues: [])
+    return EventsViewModel(currentEvents: [:], displayedLeagues: [])
   }
-
 
   private func setupEventsViewModelMap() {
     eventsViewModelMap[.football] = getFootballEventsViewModel()

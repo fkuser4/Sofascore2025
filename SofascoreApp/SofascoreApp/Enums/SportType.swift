@@ -4,7 +4,7 @@
 //
 //  Created by Filip Kušer on 24.03.2025..
 //
-enum SportType: Int, CaseIterable {
+enum SportType {
   case football
   case basketball
   case americanFootball

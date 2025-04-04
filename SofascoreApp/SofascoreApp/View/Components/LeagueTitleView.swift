@@ -13,7 +13,7 @@ class LeagueTitleView: BaseView {
   private var leagueNameLabel: UILabel = .init()
   private var arrowImageView: UIImageView = .init()
 
-  func configure(leagueName: String, country: String) {
+  func configure(leagueName: String?, country: String?) {
     countryLabel.text = country
     leagueNameLabel.text = leagueName
     arrowImageView.image = .icPointerRight

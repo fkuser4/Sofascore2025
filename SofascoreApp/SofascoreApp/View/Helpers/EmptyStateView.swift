@@ -10,12 +10,14 @@ import SofaAcademic
 
 final class EmptyStateView: BaseView {
   private let messageLabel = UILabel()
+  private let abc = "abc"
 
   public func setMessageText(_ text: String?) {
     if let text = text {
       messageLabel.text = text
     }
   }
+
   override func addViews() {
     addSubview(messageLabel)
   }
@@ -26,6 +28,7 @@ final class EmptyStateView: BaseView {
       $0.leading.trailing.equalToSuperview().inset(32)
     }
   }
+
   override func styleViews() {
     messageLabel.textColor = .secondary
     messageLabel.font = .bodyRegular
