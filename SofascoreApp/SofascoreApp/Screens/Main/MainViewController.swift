@@ -10,14 +10,11 @@ import SofaAcademic
 
 final class MainViewController: UIViewController, BaseViewProtocol {
   private let sportSelectorView = SportSelectorView()
-  private let mainViewModel = MainViewModel()
   private let sportTypes: [SportType] = [.football, .basketball, .americanFootball]
   private let initialSport: SportType = .football
   private let containerView = UIView()
-  private lazy var eventsVC: EventsViewController = {
-    let viewModel = mainViewModel.eventsViewModel(for: initialSport)! // swiftlint:disable:this force_unwrapping
-    return EventsViewController(viewModel: viewModel)
-  }()
+  private let eventsViewModel: EventsViewModel = .init()
+  private lazy var eventsVC = EventsViewController(viewModel: eventsViewModel)
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -26,6 +23,8 @@ final class MainViewController: UIViewController, BaseViewProtocol {
     addViews()
     setupConstraints()
     setupBindings()
+    sportSelectorView.configure(with: sportTypes, initialSport: initialSport)
+    eventsViewModel.selectSport(initialSport)
   }
 
   func addViews() {
@@ -54,12 +53,9 @@ final class MainViewController: UIViewController, BaseViewProtocol {
   }
 
   private func setupBindings() {
-    sportSelectorView.configure(with: sportTypes, selectedSport: initialSport)
-
     sportSelectorView.onTap = { [weak self] sport in
       guard let self = self else { return }
-      guard let selectedViewModel = self.mainViewModel.eventsViewModel(for: sport) else { return }
-      self.eventsVC.viewModel = selectedViewModel
+      self.eventsViewModel.selectSport(sport)
     }
   }
 }

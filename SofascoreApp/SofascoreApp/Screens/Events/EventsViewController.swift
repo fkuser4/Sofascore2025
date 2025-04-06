@@ -9,12 +9,7 @@ import SnapKit
 import SofaAcademic
 
 final class EventsViewController: UIViewController, BaseViewProtocol {
-  public var viewModel: EventsViewModel {
-    didSet {
-      self.collectionView.backgroundView?.isHidden = !self.viewModel.displayedLeagues.isEmpty
-      self.collectionView.reloadData()
-    }
-  }
+  private let viewModel: EventsViewModel
   private let emptyStateView = EmptyStateView()
 
   private lazy var collectionView: UICollectionView = {
@@ -25,6 +20,12 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
   init(viewModel: EventsViewModel) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
+
+    viewModel.onCurrentEventsChanged = { [weak self] in
+      guard let self = self else { return }
+      self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
+      self.collectionView.reloadData()
+    }
   }
 
   required init?(coder: NSCoder) {
@@ -40,7 +41,7 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
     styleViews()
     setupConstraints()
 
-    collectionView.backgroundView?.isHidden = !viewModel.displayedLeagues.isEmpty
+    collectionView.backgroundView?.isHidden = !viewModel.currentEvents.isEmpty
     collectionView.reloadData()
   }
 

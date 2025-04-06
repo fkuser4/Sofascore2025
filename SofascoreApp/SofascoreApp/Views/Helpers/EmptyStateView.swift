@@ -10,7 +10,6 @@ import SofaAcademic
 
 final class EmptyStateView: BaseView {
   private let messageLabel = UILabel()
-  private let abc = "abc"
 
   public func setMessageText(_ text: String?) {
     if let text = text {

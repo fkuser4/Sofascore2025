@@ -37,7 +37,7 @@ class EventView: BaseView {
       timeView.configure(
         matchTime: eventViewModel.matchStartTime,
         statusText: eventViewModel.matchStatusText,
-        statusTextColor: eventViewModel.timeTextColor)
+        statusTextColor: eventViewModel.matchStatusTextColor)
     } else {
       homeScore.text = nil
       awayScore.text = nil
