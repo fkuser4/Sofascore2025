@@ -1,13 +1,13 @@
 //
-//  SectionDeviderView.swift
+//  SportDividerView.swift
 //  SofascoreApp
 //
 //  Created by Filip Kušer on 24.03.2025..
 //
 import UIKit
 
-final class SectionDividerView: UICollectionReusableView {
-  static let reuseIdentifier = "SectionDivider"
+final class SportDividerView: UICollectionReusableView {
+  static let reuseIdentifier = "SportDivider"
   private let line = UIView()
 
   override init(frame: CGRect) {

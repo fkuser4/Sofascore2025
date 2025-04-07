@@ -26,7 +26,7 @@ class SportSelectorView: BaseView {
       let icon = UIImage(named: sport.iconName)
       let button = SportSelectorButton(icon: icon, title: sport.title)
       button.onTap = { [weak self] in
-        self?.updateUnderlineView(for: button)
+        self?.updateUnderlineView(for: button, animated: true)
         self?.onTap?(sport)
       }
 
@@ -35,7 +35,7 @@ class SportSelectorView: BaseView {
     }
 
     guard let button = buttons[initialSport] else { return }
-    updateUnderlineView(for: button)
+    updateUnderlineView(for: button, animated: false)
   }
 
   override func addViews() {
@@ -73,15 +73,16 @@ class SportSelectorView: BaseView {
     }
   }
 
-  private func updateUnderlineView(for button: UIView) {
+  private func updateUnderlineView(for button: UIView, animated: Bool) {
     underlineView.snp.remakeConstraints {
       $0.top.bottom.equalToSuperview()
       $0.leading.equalTo(button.snp.leading).offset(8)
       $0.trailing.equalTo(button.snp.trailing).offset(-8)
     }
-
-    UIView.animate(withDuration: 0.25) {
-      self.layoutIfNeeded()
+    if animated {
+      UIView.animate(withDuration: 0.25) {
+        self.layoutIfNeeded()
+      }
     }
   }
 }

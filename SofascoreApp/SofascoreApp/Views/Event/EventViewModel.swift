@@ -58,7 +58,6 @@ class EventViewModel {
     return formatter.string(from: date)
   }
 
-
   private static func formatMatchStatus(from event: Event) -> String {
     switch event.status {
     case .finished:
