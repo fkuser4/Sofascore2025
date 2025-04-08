@@ -72,9 +72,9 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
       withReuseIdentifier: LeagueHeaderCollectionReusableView.reuseIdentifier)
 
     collectionView.register(
-      SportDividerView.self,
+      SectionDividerView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-      withReuseIdentifier: SportDividerView.reuseIdentifier)
+      withReuseIdentifier: SectionDividerView.reuseIdentifier)
 
     collectionView.dataSource = self
   }
@@ -130,9 +130,9 @@ extension EventsViewController: UICollectionViewDataSource {
     } else if kind == UICollectionView.elementKindSectionFooter {
       guard let divider = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        withReuseIdentifier: SportDividerView.reuseIdentifier,
+        withReuseIdentifier: SectionDividerView.reuseIdentifier,
         for: indexPath
-      ) as? SportDividerView else {
+      ) as? SectionDividerView else {
         return UICollectionReusableView()
       }
 
