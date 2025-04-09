@@ -12,9 +12,16 @@ class LeagueHeaderView: BaseView {
   private var leagueLogoImageView: UIImageView = .init()
   private var leagueTitleView: LeagueTitleView = .init()
 
-  func configure(with leagueHeaderViewModel: LeagueHeaderViewModel) {
-    leagueLogoImageView.loadImage(from: leagueHeaderViewModel.logoURL)
-    leagueTitleView.configure(leagueName: leagueHeaderViewModel.leagueName, country: leagueHeaderViewModel.countryName)
+  func configure(with leagueHeaderViewModel: LeagueHeaderViewModel?) {
+    if let leagueHeaderViewModel = leagueHeaderViewModel {
+      leagueLogoImageView.loadImage(from: leagueHeaderViewModel.logoURL)
+      leagueTitleView.configure(
+        leagueName: leagueHeaderViewModel.leagueName,
+        country: leagueHeaderViewModel.countryName)
+    } else {
+      leagueLogoImageView.image = nil
+      leagueTitleView.configure(leagueName: nil, country: nil)
+    }
   }
 
   override func addViews() {
