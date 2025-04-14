@@ -22,9 +22,11 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
     super.init(nibName: nil, bundle: nil)
 
     viewModel.onCurrentEventsChanged = { [weak self] in
-      guard let self = self else { return }
-      self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
-      self.collectionView.reloadData()
+      DispatchQueue.main.async {
+        guard let self = self else { return }
+        self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
+        self.collectionView.reloadData()
+      }
     }
   }
 
@@ -77,6 +79,7 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
       withReuseIdentifier: SectionDividerView.reuseIdentifier)
 
     collectionView.dataSource = self
+    collectionView.delegate = self
   }
 
   private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
@@ -86,7 +89,7 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
   }
 }
 
-extension EventsViewController: UICollectionViewDataSource {
+extension EventsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return viewModel.displayedLeagues.count
   }
@@ -135,10 +138,36 @@ extension EventsViewController: UICollectionViewDataSource {
       ) as? SectionDividerView else {
         return UICollectionReusableView()
       }
-
       return divider
     }
 
     return UICollectionReusableView()
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+
+    UIView.animate(withDuration: 0.1, animations: {
+      cell.contentView.backgroundColor = .systemGray5
+    }, completion: { _ in
+      cell.contentView.backgroundColor = .white
+    })
+
+    let league = viewModel.displayedLeagues[indexPath.section]
+    guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
+      return
+    }
+    let event = events[indexPath.item]
+
+    let eventDetailsVC: EventDetailsViewController = .init()
+    eventDetailsVC.event = event
+    eventDetailsVC.sport = viewModel.selectedSport?.title ?? ""
+    eventDetailsVC.dismissVC = { [weak self] in
+      self?.navigationController?.popViewController(animated: true)
+    }
+    eventDetailsVC.modalPresentationStyle = .fullScreen
+    navigationController?.pushViewController(eventDetailsVC, animated: true)
+
+    print("item at \(indexPath.section)/\(indexPath.item) tapped")
   }
 }

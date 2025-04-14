@@ -5,9 +5,8 @@
 //  Created by Filip Kušer on 02.04.2025..
 //
 import Foundation
-import SofaAcademic
 
-extension League: @retroactive Equatable {
+extension League: Equatable {
   public static func == (lhs: League, rhs: League) -> Bool {
     return lhs.id == rhs.id
   }
