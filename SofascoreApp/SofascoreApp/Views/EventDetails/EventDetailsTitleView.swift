@@ -13,7 +13,7 @@ class EventDetailsTitleView: BaseView {
   private var titleLabel: UILabel = .init()
 
   func configure(league: League, sport: String) {
-    leagueLogoImageView.loadImage(from: league.logoUrl)
+    leagueLogoImageView.loadImage(from: league.logoUrl.url)
     titleLabel.text = "\(sport), \(league.country.name), \(league.name)"
   }
 
@@ -32,6 +32,7 @@ class EventDetailsTitleView: BaseView {
     titleLabel.snp.makeConstraints { make in
       make.centerY.equalTo(leagueLogoImageView)
       make.leading.equalTo(leagueLogoImageView.snp.trailing).offset(8)
+      make.trailing.equalToSuperview()
     }
   }
 

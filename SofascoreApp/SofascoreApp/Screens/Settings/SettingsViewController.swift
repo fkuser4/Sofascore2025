@@ -6,11 +6,12 @@
 //
 import UIKit
 import SnapKit
+import SofaAcademic
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, BaseViewProtocol {
   private let navBar = NavigationBarView()
   private let safeAreaView: UIView = .init()
-  var dismissVC: (() -> Void)?
+  var onDismiss: (() -> Void)?
   private let titleLabel: UILabel = .init()
 
   override func viewDidLoad() {
@@ -42,7 +43,7 @@ class SettingsViewController: UIViewController {
 
   func styleViews() {
     titleLabel.text = "Settings"
-    titleLabel.font = .navTitle
+    titleLabel.font = .screenHeadline
     titleLabel.textColor = .textOnPrimaryBackgroundColor
 
     let config = NavigationBarConfiguration(
@@ -58,7 +59,7 @@ class SettingsViewController: UIViewController {
 
   func setupBindings() {
     navBar.didTapBackButton = { [weak self] in
-      self?.dismissVC?()
+      self?.onDismiss?()
     }
   }
 }

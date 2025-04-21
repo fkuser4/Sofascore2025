@@ -7,10 +7,10 @@
 import UIKit
 
 extension UIImageView {
-  func loadImage(from url: String?) {
-    guard let urlString = url else { return }
+  func loadImage(from url: URL?) {
+    guard let url = url else { return }
 
-    NetworkManager.shared.downloadImage(urlString: urlString) { image in
+    ImageDownloader.shared.downloadImage(url: url) { image in
       DispatchQueue.main.async {
         self.image = image
       }

@@ -31,4 +31,16 @@ final class EventCollectionViewCell: UICollectionViewCell {
     super.prepareForReuse()
     eventView.configure(with: nil)
   }
+
+  override var isSelected: Bool {
+    didSet {
+      if super.isSelected {
+        UIView.animate(withDuration: 0.1, animations: {
+          self.backgroundColor = .systemGray5
+        }, completion: { _ in
+          self.backgroundColor = .white
+        })
+      }
+    }
+  }
 }

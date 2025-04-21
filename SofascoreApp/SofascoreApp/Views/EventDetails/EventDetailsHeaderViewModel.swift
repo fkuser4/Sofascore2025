@@ -1,27 +1,27 @@
 //
-//  EventDetailsViewModel.swift
+//  EventDetailsHeaderViewModel.swift
 //  SofascoreApp
 //
 //  Created by Filip Kušer on 14.04.2025..
 //
 import UIKit
 
-class EventDetailsViewModel {
+class EventDetailsHeaderViewModel {
   var matchTime: NSAttributedString
   var matchStatus: NSAttributedString
 
   var homeTeamName: String
   var awayTeamName: String
 
-  var homeTeamLogoURL: String
-  var awayTeamLogoURL: String
+  var homeTeamLogoURL: URL?
+  var awayTeamLogoURL: URL?
 
   init(event: Event) {
     homeTeamName = event.homeTeam.name
     awayTeamName = event.awayTeam.name
 
-    homeTeamLogoURL = event.homeTeam.logoUrl
-    awayTeamLogoURL = event.awayTeam.logoUrl
+    homeTeamLogoURL = event.homeTeam.logoUrl.url
+    awayTeamLogoURL = event.awayTeam.logoUrl.url
 
     matchTime = Self.matchTimeFormatted(event: event)
     matchStatus = Self.matchStatusFormatted(event: event)
@@ -72,7 +72,7 @@ class EventDetailsViewModel {
     switch event.status {
     case .inProgress, .halftime:
       attr.addAttributes(
-        defaultAttributes(color: .eventLive, font: .eventDetailScore),
+        defaultAttributes(color: .eventLive, font: .eventDetailHeadline),
         range: fullRange(of: scoreString)
       )
       return attr
@@ -112,14 +112,14 @@ class EventDetailsViewModel {
     let sepRange = NSRange(location: homeStr.count, length: sepStr.count)
     let awayRange = NSRange(location: homeStr.count + sepStr.count, length: awayStr.count)
 
-    attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailScore), range: sepRange)
+    attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: sepRange)
 
     if home > away {
-      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailScore), range: homeRange)
-      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailScore), range: awayRange)
+      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailHeadline), range: homeRange)
+      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: awayRange)
     } else {
-      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailScore), range: homeRange)
-      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailScore), range: awayRange)
+      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: homeRange)
+      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailHeadline), range: awayRange)
     }
 
     return attr

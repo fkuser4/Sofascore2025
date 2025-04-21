@@ -16,7 +16,7 @@ final class MainViewController: UIViewController, BaseViewProtocol {
   private let eventsViewModel: EventsViewModel = .init()
   private lazy var eventsVC = EventsViewController(viewModel: eventsViewModel)
   private let safeAreaView: UIView = .init()
-  private let headerView = HeaderView()
+  private let headerView = MainHeaderView()
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -86,11 +86,11 @@ final class MainViewController: UIViewController, BaseViewProtocol {
     headerView.didTapSettingsButton = { [weak self] in
       guard let self = self else { return }
       let settingsVC = SettingsViewController()
-      settingsVC.dismissVC = {
-        self.navigationController?.popViewController(animated: true)
+      settingsVC.onDismiss = {
+        self.dismiss(animated: true)
       }
       settingsVC.modalPresentationStyle = .fullScreen
-      self.navigationController?.pushViewController(settingsVC, animated: true)
+      self.present(settingsVC, animated: true)
     }
   }
 }

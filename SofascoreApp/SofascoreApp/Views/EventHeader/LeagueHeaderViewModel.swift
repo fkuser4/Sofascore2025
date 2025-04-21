@@ -9,11 +9,11 @@ import Foundation
 class LeagueHeaderViewModel {
   let leagueName: String
   let countryName: String
-  let logoURL: String
+  let logoURL: URL?
 
   init(league: League) {
     leagueName = league.name
     countryName = league.country.name
-    logoURL = league.logoUrl
+    logoURL = league.logoUrl.url
   }
 }

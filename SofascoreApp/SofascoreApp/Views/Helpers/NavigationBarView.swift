@@ -10,7 +10,6 @@ import SnapKit
 
 final class NavigationBarView: BaseView {
   private let backButton = UIButton()
-  private let backIconImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysTemplate)
   private var titleView: UIView?
 
   var didTapBackButton: (() -> Void)?
@@ -43,7 +42,7 @@ final class NavigationBarView: BaseView {
   }
 
   override func styleViews() {
-    backButton.setImage(backIconImage, for: .normal)
+    backButton.setImage(.icBack, for: .normal)
     backButton.imageView?.contentMode = .scaleAspectFit
   }
 

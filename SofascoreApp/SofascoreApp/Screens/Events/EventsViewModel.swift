@@ -12,7 +12,7 @@ class EventsViewModel {
       onCurrentEventsChanged?()
     }
   }
-  var selectedSport: SportType?
+  private(set) var selectedSport: SportType?
   var displayedLeagues: [League] {
     return currentEvents.keys.sorted { $0.name < $1.name }
   }
@@ -21,7 +21,7 @@ class EventsViewModel {
 
   func selectSport(_ sport: SportType) {
     selectedSport = sport
-    NetworkManager.shared.getEvents(sportType: sport) { [weak self] result in
+    APIClient.shared.getEvents(sportType: sport) { [weak self] result in
       guard let self = self else { return }
 
       switch result {
@@ -35,11 +35,12 @@ class EventsViewModel {
             $0.startTimestamp < $1.startTimestamp
           }
         }
-
-        self.currentEvents = grouped
+        DispatchQueue.main.async {
+          self.currentEvents = grouped
+        }
 
       case .failure(let error):
-        print("Error: \(error)")
+        print("Error: \(error.localizedDescription)")
       }
     }
   }

@@ -1,5 +1,5 @@
 //
-//  EventDetailsView.swift
+//  EventDetailsHeaderView.swift
 //  SofascoreApp
 //
 //  Created by Filip Kušer on 13.04.2025..
@@ -8,7 +8,7 @@ import SnapKit
 import UIKit
 import SofaAcademic
 
-class EventDetailsView: BaseView {
+class EventDetailsHeaderView: BaseView {
   private var homeTeamLogoImageView: UIImageView = .init()
   private var awayTeamLogoImageView: UIImageView = .init()
 
@@ -20,7 +20,7 @@ class EventDetailsView: BaseView {
 
   private var centerStack: UIStackView = .init()
 
-  func configure(with viewModel: EventDetailsViewModel) {
+  func configure(with viewModel: EventDetailsHeaderViewModel) {
     homeTeamLogoImageView.loadImage(from: viewModel.homeTeamLogoURL)
     awayTeamLogoImageView.loadImage(from: viewModel.awayTeamLogoURL)
 
@@ -55,11 +55,11 @@ class EventDetailsView: BaseView {
     homeTeamLabel.textColor = .primary
     awayTeamLabel.textColor = .primary
 
-    homeTeamLabel.numberOfLines = 0
+    homeTeamLabel.numberOfLines = 2
     homeTeamLabel.lineBreakMode = .byWordWrapping
     homeTeamLabel.textAlignment = .center
 
-    awayTeamLabel.numberOfLines = 0
+    awayTeamLabel.numberOfLines = 2
     awayTeamLabel.lineBreakMode = .byWordWrapping
     awayTeamLabel.textAlignment = .center
   }
@@ -80,14 +80,14 @@ class EventDetailsView: BaseView {
       make.centerX.equalTo(homeTeamLogoImageView)
       make.top.equalTo(homeTeamLogoImageView.snp.bottom).offset(8)
       make.bottom.lessThanOrEqualToSuperview().inset(15)
-      make.width.lessThanOrEqualTo(homeTeamLogoImageView.snp.width).multipliedBy(2.4)
+      make.leading.greaterThanOrEqualToSuperview().inset(16)
     }
 
     awayTeamLabel.snp.makeConstraints { make in
       make.centerX.equalTo(awayTeamLogoImageView)
       make.centerY.equalTo(homeTeamLabel)
       make.bottom.lessThanOrEqualToSuperview().inset(15)
-      make.width.lessThanOrEqualTo(awayTeamLogoImageView.snp.width).multipliedBy(2.4)
+      make.trailing.greaterThanOrEqualToSuperview().inset(16)
     }
 
     centerStack.snp.makeConstraints { make in

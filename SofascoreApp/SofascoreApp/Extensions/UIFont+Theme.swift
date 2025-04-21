@@ -11,6 +11,6 @@ extension UIFont {
   static let bodyRegular: UIFont = .regular(size: 14)
   static let bodyLight: UIFont = .regular(size: 12)
   static let bodyBold: UIFont = .bold(size: 12)
-  static let navTitle: UIFont = .bold(size: 20)
-  static let eventDetailScore: UIFont = .bold(size: 32)
+  static let screenHeadline: UIFont = .bold(size: 20)
+  static let eventDetailHeadline: UIFont = .bold(size: 32)
 }

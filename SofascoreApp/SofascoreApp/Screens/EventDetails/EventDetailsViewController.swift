@@ -6,13 +6,14 @@
 //
 import SnapKit
 import UIKit
+import SofaAcademic
 
-class EventDetailsViewController: UIViewController {
+class EventDetailsViewController: UIViewController, BaseViewProtocol {
   private let navBar = NavigationBarView()
   private let titleView = EventDetailsTitleView()
-  private let eventDetailsView = EventDetailsView()
+  private let eventDetailsView = EventDetailsHeaderView()
   private let safeAreaView: UIView = .init()
-  var dismissVC: (() -> Void)?
+  var onDismiss: (() -> Void)?
   var event: Event?
   var sport: String?
 
@@ -52,7 +53,7 @@ class EventDetailsViewController: UIViewController {
 
   func styleViews() {
     if let event = event {
-      let eventDetailViewModel = EventDetailsViewModel(event: event)
+      let eventDetailViewModel = EventDetailsHeaderViewModel(event: event)
       eventDetailsView.configure(with: eventDetailViewModel)
       titleView.configure(league: event.league, sport: sport ?? "")
     }
@@ -70,7 +71,7 @@ class EventDetailsViewController: UIViewController {
 
   func setupBindings() {
     navBar.didTapBackButton = { [weak self] in
-      self?.dismissVC?()
+      self?.onDismiss?()
     }
   }
 }

@@ -10,8 +10,8 @@ class EventViewModel {
   let homeTeamName: String
   let awayTeamName: String
 
-  let homeTeamLogoURL: String
-  let awayTeamLogoURL: String
+  let homeTeamLogoURL: URL?
+  let awayTeamLogoURL: URL?
 
   let homeScore: String
   let awayScore: String
@@ -31,8 +31,8 @@ class EventViewModel {
     homeTeamName = event.homeTeam.name
     awayTeamName = event.awayTeam.name
 
-    homeTeamLogoURL = event.homeTeam.logoUrl
-    awayTeamLogoURL = event.awayTeam.logoUrl
+    homeTeamLogoURL = event.homeTeam.logoUrl.url
+    awayTeamLogoURL = event.awayTeam.logoUrl.url
     homeScore = event.homeScore.map { "\($0)" } ?? ""
     awayScore = event.awayScore.map { "\($0)" } ?? ""
 

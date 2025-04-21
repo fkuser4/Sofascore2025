@@ -22,11 +22,9 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
     super.init(nibName: nil, bundle: nil)
 
     viewModel.onCurrentEventsChanged = { [weak self] in
-      DispatchQueue.main.async {
-        guard let self = self else { return }
-        self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
-        self.collectionView.reloadData()
-      }
+      guard let self = self else { return }
+      self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
+      self.collectionView.reloadData()
     }
   }
 
@@ -108,6 +106,7 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     let league = viewModel.displayedLeagues[indexPath.section]
+
     guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
       return cell
     }
@@ -145,14 +144,6 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-
-    UIView.animate(withDuration: 0.1, animations: {
-      cell.contentView.backgroundColor = .systemGray5
-    }, completion: { _ in
-      cell.contentView.backgroundColor = .white
-    })
-
     let league = viewModel.displayedLeagues[indexPath.section]
     guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
       return
@@ -162,10 +153,9 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
     let eventDetailsVC: EventDetailsViewController = .init()
     eventDetailsVC.event = event
     eventDetailsVC.sport = viewModel.selectedSport?.title ?? ""
-    eventDetailsVC.dismissVC = { [weak self] in
+    eventDetailsVC.onDismiss = { [weak self] in
       self?.navigationController?.popViewController(animated: true)
     }
-    eventDetailsVC.modalPresentationStyle = .fullScreen
     navigationController?.pushViewController(eventDetailsVC, animated: true)
 
     print("item at \(indexPath.section)/\(indexPath.item) tapped")

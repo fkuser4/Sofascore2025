@@ -12,3 +12,15 @@ public struct League: Decodable {
   public let country: Country
   public let logoUrl: String
 }
+
+extension League: Hashable {
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
+extension League: Equatable {
+  public static func == (lhs: League, rhs: League) -> Bool {
+    return lhs.id == rhs.id
+  }
+}

@@ -1,5 +1,5 @@
 //
-//  HeaderView.swift
+//  MainHeaderView.swift
 //  SofascoreApp
 //
 //  Created by Filip Kušer on 13.04.2025..
@@ -8,15 +8,11 @@ import SofaAcademic
 import UIKit
 import SnapKit
 
-class HeaderView: BaseView {
+class MainHeaderView: BaseView {
   private let headerTitleView = UIImageView()
 
   private let settingsButton = UIButton()
   private let trophyButton = UIButton()
-
-  private let settingsIcon = UIImage(named: "ic_settings")
-  private let trophyIcon = UIImage(named: "ic_trophy")
-  private let headerTitleIcon = UIImage(named: "ic_header_title")
 
   var didTapSettingsButton: (() -> Void)?
   var didTapTrophyButton: (() -> Void)?
@@ -24,14 +20,14 @@ class HeaderView: BaseView {
   override func styleViews() {
     backgroundColor = .primaryBackgroundColor
 
-    headerTitleView.image = headerTitleIcon
+    headerTitleView.image = .icHeaderTitle
     headerTitleView.contentMode = .scaleAspectFit
     headerTitleView.tintColor = .textOnPrimaryBackgroundColor
 
-    settingsButton.setBackgroundImage(settingsIcon, for: .normal)
+    settingsButton.setBackgroundImage(.icSettings, for: .normal)
     settingsButton.imageView?.contentMode = .scaleAspectFit
 
-    trophyButton.setBackgroundImage(trophyIcon, for: .normal)
+    trophyButton.setBackgroundImage(.icTrophy, for: .normal)
     trophyButton.imageView?.contentMode = .scaleAspectFit
   }
 
@@ -54,14 +50,14 @@ class HeaderView: BaseView {
     }
 
     settingsButton.snp.makeConstraints { make in
-      make.size.equalTo(20)
+      make.size.equalTo(24)
       make.trailing.equalToSuperview().inset(16)
       make.centerY.equalTo(headerTitleView)
     }
 
     trophyButton.snp.makeConstraints { make in
       make.size.centerY.equalTo(settingsButton)
-      make.trailing.equalTo(settingsButton.snp.leading).offset(-26)
+      make.trailing.equalTo(settingsButton.snp.leading).offset(-24)
     }
   }
 
