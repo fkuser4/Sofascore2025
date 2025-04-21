@@ -7,8 +7,8 @@
 import UIKit
 
 struct NavigationBarConfiguration {
-  var titleView: UIView
+  var title: String?
+  var titleView: UIView?
   var backIconColor: UIColor
-  var titleLeadingOffset: CGFloat
   var backgroundColor: UIColor
 }

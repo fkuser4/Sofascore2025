@@ -61,7 +61,6 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
     let config = NavigationBarConfiguration(
       titleView: self.titleView,
       backIconColor: .backIconOnWhite,
-      titleLeadingOffset: 28,
       backgroundColor: .secondaryBackgroundColor
     )
     navBar.configure(with: config)

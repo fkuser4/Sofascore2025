@@ -10,27 +10,32 @@ import SnapKit
 
 final class NavigationBarView: BaseView {
   private let backButton = UIButton()
-  private var titleView: UIView?
-
+  private var titleLabel: UILabel = .init()
   var didTapBackButton: (() -> Void)?
 
   func configure(with config: NavigationBarConfiguration) {
-    titleView?.removeFromSuperview()
-    let newTitleView = config.titleView
-    self.titleView = newTitleView
-    addSubview(newTitleView)
-
-    newTitleView.snp.makeConstraints { make in
-      make.leading.equalTo(backButton.snp.trailing).offset(config.titleLeadingOffset)
-      make.centerY.equalTo(backButton)
-    }
-
     backButton.tintColor = config.backIconColor
     backgroundColor = config.backgroundColor
+
+    guard let titleView = config.titleView else {
+      if let title = config.title {
+        titleLabel.text = title
+        titleLabel.isHidden = false
+      }
+      return
+    }
+
+    addSubview(titleView)
+
+    titleView.snp.makeConstraints { make in
+      make.centerY.equalToSuperview()
+      make.leading.equalTo(backButton.snp.trailing)
+    }
   }
 
   override func addViews() {
     addSubview(backButton)
+    addSubview(titleLabel)
   }
 
   override func setupConstraints() {
@@ -39,9 +44,19 @@ final class NavigationBarView: BaseView {
       make.leading.equalToSuperview().inset(20)
       make.top.bottom.equalToSuperview().inset(16)
     }
+
+    titleLabel.snp.makeConstraints { make in
+      make.centerY.equalToSuperview()
+      make.trailing.equalToSuperview()
+      make.leading.equalTo(backButton.snp.leading).offset(36)
+    }
   }
 
   override func styleViews() {
+    titleLabel.isHidden = true
+    titleLabel.font = .screenHeadline
+    titleLabel.textColor = .textOnPrimaryBackgroundColor
+
     backButton.setImage(.icBack, for: .normal)
     backButton.imageView?.contentMode = .scaleAspectFit
   }

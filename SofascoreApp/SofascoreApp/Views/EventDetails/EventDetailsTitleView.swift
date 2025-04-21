@@ -26,7 +26,7 @@ class EventDetailsTitleView: BaseView {
     leagueLogoImageView.snp.makeConstraints { make in
       make.top.bottom.equalToSuperview()
       make.size.equalTo(16)
-      make.leading.equalToSuperview()
+      make.leading.equalToSuperview().inset(28)
     }
 
     titleLabel.snp.makeConstraints { make in

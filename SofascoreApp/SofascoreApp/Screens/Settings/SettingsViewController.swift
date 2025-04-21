@@ -42,14 +42,9 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
   }
 
   func styleViews() {
-    titleLabel.text = "Settings"
-    titleLabel.font = .screenHeadline
-    titleLabel.textColor = .textOnPrimaryBackgroundColor
-
     let config = NavigationBarConfiguration(
-      titleView: titleLabel,
+      title: "Settings",
       backIconColor: .backIconOnBlue,
-      titleLeadingOffset: 36,
       backgroundColor: .primaryBackgroundColor
     )
     navBar.configure(with: config)
