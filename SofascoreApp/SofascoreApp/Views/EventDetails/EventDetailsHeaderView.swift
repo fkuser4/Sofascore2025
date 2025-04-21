@@ -15,10 +15,12 @@ class EventDetailsHeaderView: BaseView {
   private var homeTeamLabel: UILabel = .init()
   private var awayTeamLabel: UILabel = .init()
 
-  private var matchTimeLabel: UILabel = .init()
-  private var matchStatusLabel: UILabel = .init()
-
   private var centerStack: UIStackView = .init()
+
+  private var scoreView: ScoreView = .init()
+  private var matchStartDateLabel: UILabel = .init()
+  private var matchTimeLabel: UILabel = .init()
+
 
   func configure(with viewModel: EventDetailsHeaderViewModel) {
     homeTeamLogoImageView.loadImage(from: viewModel.homeTeamLogoURL)
@@ -27,15 +29,23 @@ class EventDetailsHeaderView: BaseView {
     homeTeamLabel.text = viewModel.homeTeamName
     awayTeamLabel.text = viewModel.awayTeamName
 
-    matchTimeLabel.attributedText = viewModel.matchTime
-    matchStatusLabel.attributedText = viewModel.matchStatus
+    matchTimeLabel.text = viewModel.matchTime
+    matchTimeLabel.textColor = viewModel.matchTimeColor
+
+    if viewModel.scoreAvailable {
+      centerStack.addArrangedSubview(scoreView)
+      centerStack.addArrangedSubview(matchTimeLabel)
+      scoreView.configure(with: viewModel)
+    } else {
+      matchStartDateLabel.text = viewModel.matchStartDate
+      centerStack.addArrangedSubview(matchStartDateLabel)
+      centerStack.addArrangedSubview(matchTimeLabel)
+    }
   }
 
   override func addViews() {
     addSubview(homeTeamLogoImageView)
     addSubview(awayTeamLogoImageView)
-    centerStack.addArrangedSubview(matchStatusLabel)
-    centerStack.addArrangedSubview(matchTimeLabel)
     addSubview(centerStack)
     addSubview(homeTeamLabel)
     addSubview(awayTeamLabel)
@@ -62,6 +72,11 @@ class EventDetailsHeaderView: BaseView {
     awayTeamLabel.numberOfLines = 2
     awayTeamLabel.lineBreakMode = .byWordWrapping
     awayTeamLabel.textAlignment = .center
+
+    matchStartDateLabel.textColor = .primary
+    matchStartDateLabel.font = .bodyLight
+
+    matchTimeLabel.font = .bodyLight
   }
 
   override func setupConstraints() {
@@ -87,12 +102,13 @@ class EventDetailsHeaderView: BaseView {
       make.centerX.equalTo(awayTeamLogoImageView)
       make.centerY.equalTo(homeTeamLabel)
       make.bottom.lessThanOrEqualToSuperview().inset(15)
-      make.trailing.greaterThanOrEqualToSuperview().inset(16)
+      make.trailing.lessThanOrEqualToSuperview().inset(16)
     }
 
     centerStack.snp.makeConstraints { make in
-      make.centerY.equalToSuperview()
-      make.centerX.equalToSuperview()
+      make.centerY.centerX.equalToSuperview()
+      make.leading.greaterThanOrEqualTo(homeTeamLabel.snp.trailing)
+      make.trailing.lessThanOrEqualTo(awayTeamLabel.snp.leading)
     }
   }
 }

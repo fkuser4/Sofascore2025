@@ -7,14 +7,26 @@
 import UIKit
 
 class EventDetailsHeaderViewModel {
-  var matchTime: NSAttributedString
-  var matchStatus: NSAttributedString
+  var matchTime: String
+  var matchTimeColor: UIColor
 
   var homeTeamName: String
   var awayTeamName: String
 
+  var homeTeamScore: String
+  var homeTeamScoreColor: UIColor
+
+  var awayTeamScore: String
+  var awayTeamScoreColor: UIColor
+
+  var seperatorColor: UIColor
+
   var homeTeamLogoURL: URL?
   var awayTeamLogoURL: URL?
+
+  var scoreAvailable: Bool
+
+  var matchStartDate: String
 
   init(event: Event) {
     homeTeamName = event.homeTeam.name
@@ -23,77 +35,47 @@ class EventDetailsHeaderViewModel {
     homeTeamLogoURL = event.homeTeam.logoUrl.url
     awayTeamLogoURL = event.awayTeam.logoUrl.url
 
+    homeTeamName = event.homeTeam.name
+    homeTeamScore = "\(event.homeScore ?? 0)"
+    awayTeamName = event.awayTeam.name
+    awayTeamScore = "\(event.awayScore ?? 0)"
+
+    homeTeamScoreColor = Self.homeTeamScoreColor(event: event)
+    awayTeamScoreColor = Self.awayTeamScoreColor(event: event)
+    seperatorColor = Self.seperatorColor(event: event)
+
     matchTime = Self.matchTimeFormatted(event: event)
-    matchStatus = Self.matchStatusFormatted(event: event)
+    matchTimeColor = Self.matchTimeColor(event: event)
+
+    scoreAvailable = event.awayScore != nil && event.homeScore != nil
+    matchStartDate = Self.formatTimestampToDate(event.startTimestamp)
   }
 
-  private static func matchTimeFormatted(event: Event) -> NSAttributedString {
-    let timeString: String
-    let color: UIColor
-
+  private static func matchTimeFormatted(event: Event) -> String {
     switch event.status {
     case .notStarted:
-      timeString = formatTimestampToHourMinute(event.startTimestamp)
-      color = .primary
-
+      return formatTimestampToHourMinute(event.startTimestamp)
     case .inProgress:
       let now = Int(Date().timeIntervalSince1970)
       let elapsed = now - event.startTimestamp
       let minutes = max(elapsed / 60, 0)
-      timeString = "\(minutes)'"
-      color = .eventLive
-
+      return "\(minutes)'"
     case .halftime:
-      timeString = "Halftime"
-      color = .secondary
-
+      return "Halftime"
     case .finished:
-      timeString = "Full Time"
-      color = .secondary
+      return "Full Time"
     }
-
-    return NSAttributedString(string: timeString, attributes: [
-      .font: UIFont.bodyLight,
-      .foregroundColor: color
-    ])
   }
 
-  private static func matchStatusFormatted(event: Event) -> NSAttributedString {
-    guard let home = event.homeScore, let away = event.awayScore else {
-      return NSAttributedString(
-        string: formatTimestampToDate(event.startTimestamp),
-        attributes: defaultAttributes(color: .primary, font: .bodyLight)
-      )
-    }
-
-    let scoreString = "\(home) - \(away)"
-    let attr = NSMutableAttributedString(string: scoreString)
-
+  private static func matchTimeColor(event: Event) -> UIColor {
     switch event.status {
-    case .inProgress, .halftime:
-      attr.addAttributes(
-        defaultAttributes(color: .eventLive, font: .eventDetailHeadline),
-        range: fullRange(of: scoreString)
-      )
-      return attr
-
-    case .finished:
-      return styleFinishedScore(attr, home: home, away: away)
-
-    default:
-      return attr
+    case .notStarted:
+      return .primary
+    case .inProgress:
+      return .eventLive
+    case .halftime, .finished:
+      return .secondary
     }
-  }
-
-  private static func defaultAttributes(color: UIColor, font: UIFont) -> [NSAttributedString.Key: Any] {
-    return [
-      .foregroundColor: color,
-      .font: font
-    ]
-  }
-
-  private static func fullRange(of string: String) -> NSRange {
-    return NSRange(location: 0, length: string.count)
   }
 
   private static func formatTimestampToDate(_ timestamp: Int) -> String {
@@ -103,32 +85,47 @@ class EventDetailsHeaderViewModel {
     return formatter.string(from: date)
   }
 
-  private static func styleFinishedScore(_ attr: NSMutableAttributedString, home: Int, away: Int) -> NSAttributedString {
-    let homeStr = "\(home)"
-    let sepStr = " - "
-    let awayStr = "\(away)"
-
-    let homeRange = NSRange(location: 0, length: homeStr.count)
-    let sepRange = NSRange(location: homeStr.count, length: sepStr.count)
-    let awayRange = NSRange(location: homeStr.count + sepStr.count, length: awayStr.count)
-
-    attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: sepRange)
-
-    if home > away {
-      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailHeadline), range: homeRange)
-      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: awayRange)
-    } else {
-      attr.addAttributes(defaultAttributes(color: .secondary, font: .eventDetailHeadline), range: homeRange)
-      attr.addAttributes(defaultAttributes(color: .primary, font: .eventDetailHeadline), range: awayRange)
-    }
-
-    return attr
-  }
-
   private static func formatTimestampToHourMinute(_ timestamp: Int) -> String {
     let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
     let formatter = DateFormatter()
     formatter.dateFormat = "HH:mm"
     return formatter.string(from: date)
+  }
+
+  private static func homeTeamScoreColor(event: Event) -> UIColor {
+    switch event.status {
+    case .inProgress, .halftime:
+      return .eventLive
+    case .finished:
+      guard let homeScore = event.homeScore, let awayScore = event.awayScore else {
+        return .secondary
+      }
+      return homeScore > awayScore ? .primary : .secondary
+    default:
+      return .secondary
+    }
+  }
+
+  private static func awayTeamScoreColor(event: Event) -> UIColor {
+    switch event.status {
+    case .inProgress, .halftime:
+      return .eventLive
+    case .finished:
+      guard let homeScore = event.homeScore, let awayScore = event.awayScore else {
+        return .secondary
+      }
+      return awayScore > homeScore ? .primary : .secondary
+    default:
+      return .secondary
+    }
+  }
+
+  private static func seperatorColor(event: Event) -> UIColor {
+    switch event.status {
+    case .inProgress, .halftime:
+      return .eventLive
+    default:
+      return .secondary
+    }
   }
 }
