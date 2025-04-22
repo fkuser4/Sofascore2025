@@ -19,7 +19,7 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .eventDetailsBackgroundColor
 
     addViews()
     setupConstraints()

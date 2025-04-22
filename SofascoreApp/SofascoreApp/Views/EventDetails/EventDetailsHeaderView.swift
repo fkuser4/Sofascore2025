@@ -52,6 +52,8 @@ class EventDetailsHeaderView: BaseView {
   }
 
   override func styleViews() {
+    self.backgroundColor = .white
+
     centerStack.axis = .vertical
     centerStack.alignment = .center
     centerStack.spacing = 4

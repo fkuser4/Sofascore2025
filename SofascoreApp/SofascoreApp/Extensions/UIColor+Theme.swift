@@ -15,4 +15,5 @@ extension UIColor {
   static let secondaryBackgroundColor = UIColor(hex: "#FFFFFF")
   static let backIconOnWhite = UIColor(hex: "#121212")
   static let backIconOnBlue = UIColor(hex: "#FFFFFF")
+  static let eventDetailsBackgroundColor = UIColor(hex: "#EFF3F8")
 }

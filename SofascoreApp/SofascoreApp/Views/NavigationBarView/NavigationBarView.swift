@@ -12,24 +12,30 @@ final class NavigationBarView: BaseView {
   private let backButton = UIButton()
   private var titleLabel: UILabel = .init()
   var didTapBackButton: (() -> Void)?
+  private var titleView: UIView?
 
   func configure(with config: NavigationBarConfiguration) {
+    titleView?.removeFromSuperview()
+    titleView = nil
+
+    titleLabel.isHidden = true
+
     backButton.tintColor = config.backIconColor
     backgroundColor = config.backgroundColor
 
-    guard let titleView = config.titleView else {
-      if let title = config.title {
-        titleLabel.text = title
-        titleLabel.isHidden = false
+    if let customTitleView = config.titleView {
+      addSubview(customTitleView)
+
+      customTitleView.snp.makeConstraints { make in
+        make.centerY.equalToSuperview()
+        make.leading.equalTo(backButton.snp.trailing)
+        make.trailing.lessThanOrEqualToSuperview()
       }
-      return
-    }
 
-    addSubview(titleView)
-
-    titleView.snp.makeConstraints { make in
-      make.centerY.equalToSuperview()
-      make.leading.equalTo(backButton.snp.trailing)
+      self.titleView = customTitleView
+    } else if let title = config.title {
+      titleLabel.text = title
+      titleLabel.isHidden = false
     }
   }
 
