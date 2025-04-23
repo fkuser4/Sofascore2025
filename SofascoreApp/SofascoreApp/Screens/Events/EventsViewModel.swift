@@ -4,7 +4,7 @@
 //
 //  Created by Filip Kušer on 02.04.2025..
 //
-import SofaAcademic
+import UIKit
 
 class EventsViewModel {
   private(set) var currentEvents: [League: [Event]] = [:] {
@@ -12,49 +12,36 @@ class EventsViewModel {
       onCurrentEventsChanged?()
     }
   }
-
+  private(set) var selectedSport: SportType?
   var displayedLeagues: [League] {
     return currentEvents.keys.sorted { $0.name < $1.name }
   }
 
-  private let dataSource = Homework3DataSource()
-  private var eventsMap: [SportType: [League: [Event]]] = [:]
   var onCurrentEventsChanged: (() -> Void)?
 
-  init() {
-    setupEventsViewModelMap()
-  }
-
   func selectSport(_ sport: SportType) {
-    currentEvents = eventsMap[sport] ?? [:]
-  }
+    selectedSport = sport
+    APIClient.shared.getEvents(sportType: sport) { [weak self] result in
+      guard let self = self else { return }
 
-  private func getFootballCurrentEvents() -> [League: [Event]] {
-    let allEvents = dataSource.events()
+      switch result {
+      case .success(let events):
+        var grouped = Dictionary(grouping: events) {
+          $0.league
+        }
 
-    // check if event has league so we can safely force unwrap
-    let eventsWithLeague = allEvents.filter { event in
-      event.league != nil
+        for (league, events) in grouped {
+          grouped[league] = events.sorted {
+            $0.startTimestamp < $1.startTimestamp
+          }
+        }
+        DispatchQueue.main.async {
+          self.currentEvents = grouped
+        }
+
+      case .failure(let error):
+        print("Error: \(error.localizedDescription)")
+      }
     }
-
-    let currentEvents = Dictionary(grouping: eventsWithLeague) { event -> League in
-      event.league! // swiftlint:disable:this force_unwrapping
-    }
-
-    return currentEvents
-  }
-
-  private func getBasketballCurrentEvents() -> [League: [Event]] {
-    return [:]
-  }
-
-  private func getAmericanFootballCurrentEvents() -> [League: [Event]] {
-    return [:]
-  }
-
-  private func setupEventsViewModelMap() {
-    eventsMap[.football] = getFootballCurrentEvents()
-    eventsMap[.basketball] = getBasketballCurrentEvents()
-    eventsMap[.americanFootball] = getAmericanFootballCurrentEvents()
   }
 }

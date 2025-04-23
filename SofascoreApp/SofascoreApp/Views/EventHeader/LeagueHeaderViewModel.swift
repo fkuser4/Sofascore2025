@@ -5,7 +5,6 @@
 //  Created by Filip Kušer on 16.03.2025..
 //
 import Foundation
-import SofaAcademic
 
 class LeagueHeaderViewModel {
   let leagueName: String
@@ -14,7 +13,7 @@ class LeagueHeaderViewModel {
 
   init(league: League) {
     leagueName = league.name
-    countryName = league.country?.name ?? ""
-    logoURL = league.logoUrl?.url
+    countryName = league.country.name
+    logoURL = league.logoUrl.url
   }
 }

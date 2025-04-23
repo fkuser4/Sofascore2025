@@ -36,12 +36,12 @@ final class SportSelectorButton: UIControl {
 
     iconImageView.image = icon
     iconImageView.contentMode = .scaleAspectFit
-    iconImageView.tintColor = .sportSelectorText
+    iconImageView.tintColor = .textOnPrimaryBackgroundColor
 
     titleLabel.text = title
     titleLabel.font = .bodyRegular
     titleLabel.textAlignment = .center
-    titleLabel.textColor = .sportSelectorText
+    titleLabel.textColor = .textOnPrimaryBackgroundColor
 
     iconImageView.snp.makeConstraints {
       $0.size.equalTo(16)

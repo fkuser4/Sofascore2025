@@ -77,6 +77,7 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
       withReuseIdentifier: SectionDividerView.reuseIdentifier)
 
     collectionView.dataSource = self
+    collectionView.delegate = self
   }
 
   private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
@@ -86,7 +87,7 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
   }
 }
 
-extension EventsViewController: UICollectionViewDataSource {
+extension EventsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return viewModel.displayedLeagues.count
   }
@@ -105,6 +106,7 @@ extension EventsViewController: UICollectionViewDataSource {
     }
 
     let league = viewModel.displayedLeagues[indexPath.section]
+
     guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
       return cell
     }
@@ -135,10 +137,27 @@ extension EventsViewController: UICollectionViewDataSource {
       ) as? SectionDividerView else {
         return UICollectionReusableView()
       }
-
       return divider
     }
 
     return UICollectionReusableView()
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let league = viewModel.displayedLeagues[indexPath.section]
+    guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
+      return
+    }
+    let event = events[indexPath.item]
+
+    let eventDetailsVC: EventDetailsViewController = .init()
+    eventDetailsVC.event = event
+    eventDetailsVC.sport = viewModel.selectedSport?.title ?? ""
+    eventDetailsVC.onDismiss = { [weak self] in
+      self?.navigationController?.popViewController(animated: true)
+    }
+    navigationController?.pushViewController(eventDetailsVC, animated: true)
+
+    print("item at \(indexPath.section)/\(indexPath.item) tapped")
   }
 }

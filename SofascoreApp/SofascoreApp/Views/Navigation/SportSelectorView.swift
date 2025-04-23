@@ -49,11 +49,11 @@ class SportSelectorView: BaseView {
     stackView.distribution = .fillEqually
     stackView.alignment = .fill
     stackView.spacing = 0
-    stackView.backgroundColor = .sportSelectorBackground
+    stackView.backgroundColor = .primaryBackgroundColor
 
-    underlineTrackView.backgroundColor = .sportSelectorBackground
+    underlineTrackView.backgroundColor = .primaryBackgroundColor
 
-    underlineView.backgroundColor = .sportSelectorText
+    underlineView.backgroundColor = .textOnPrimaryBackgroundColor
     underlineView.layer.cornerRadius = 2
     underlineView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     underlineView.clipsToBounds = true

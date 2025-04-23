@@ -15,6 +15,13 @@ final class MainViewController: UIViewController, BaseViewProtocol {
   private let containerView = UIView()
   private let eventsViewModel: EventsViewModel = .init()
   private lazy var eventsVC = EventsViewController(viewModel: eventsViewModel)
+  private let safeAreaView: UIView = .init()
+  private let headerView = MainHeaderView()
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,11 +30,14 @@ final class MainViewController: UIViewController, BaseViewProtocol {
     addViews()
     setupConstraints()
     setupBindings()
+    styleViews()
     sportSelectorView.configure(with: sportTypes, initialSport: initialSport)
     eventsViewModel.selectSport(initialSport)
   }
 
   func addViews() {
+    view.addSubview(safeAreaView)
+    view.addSubview(headerView)
     view.addSubview(sportSelectorView)
     view.addSubview(containerView)
 
@@ -37,8 +47,19 @@ final class MainViewController: UIViewController, BaseViewProtocol {
   }
 
   func setupConstraints() {
-    sportSelectorView.snp.makeConstraints {
+    safeAreaView.snp.makeConstraints {
+      $0.top.equalTo(view)
+      $0.leading.trailing.equalToSuperview()
+      $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+    }
+
+    headerView.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide)
+      $0.leading.trailing.equalToSuperview()
+    }
+
+    sportSelectorView.snp.makeConstraints {
+      $0.top.equalTo(headerView.snp.bottom)
       $0.leading.trailing.equalToSuperview()
     }
 
@@ -52,10 +73,24 @@ final class MainViewController: UIViewController, BaseViewProtocol {
     }
   }
 
+  func styleViews() {
+    safeAreaView.backgroundColor = .primaryBackgroundColor
+  }
+
   private func setupBindings() {
     sportSelectorView.onTap = { [weak self] sport in
       guard let self = self else { return }
       self.eventsViewModel.selectSport(sport)
+    }
+
+    headerView.didTapSettingsButton = { [weak self] in
+      guard let self = self else { return }
+      let settingsVC = SettingsViewController()
+      settingsVC.onDismiss = {
+        self.dismiss(animated: true)
+      }
+      settingsVC.modalPresentationStyle = .fullScreen
+      self.present(settingsVC, animated: true)
     }
   }
 }

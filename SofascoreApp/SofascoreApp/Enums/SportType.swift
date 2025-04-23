@@ -17,6 +17,14 @@ enum SportType {
     }
   }
 
+  var param: String {
+    switch self {
+    case .football: return "football"
+    case .basketball: return "basketball"
+    case .americanFootball: return "am-football"
+    }
+  }
+
   var iconName: String {
     switch self {
     case .football: return "ic_football"

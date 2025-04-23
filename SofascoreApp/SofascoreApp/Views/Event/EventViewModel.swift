@@ -4,8 +4,6 @@
 //
 //  Created by Filip Kušer on 16.03.2025..
 //
-import Foundation
-import SofaAcademic
 import UIKit
 
 class EventViewModel {
@@ -33,11 +31,10 @@ class EventViewModel {
     homeTeamName = event.homeTeam.name
     awayTeamName = event.awayTeam.name
 
-    homeTeamLogoURL = event.homeTeam.logoUrl?.url
-    awayTeamLogoURL = event.awayTeam.logoUrl?.url
-
-    homeScore = event.homeScore.map { "\($0)" } ?? "-"
-    awayScore = event.awayScore.map { "\($0)" } ?? "-"
+    homeTeamLogoURL = event.homeTeam.logoUrl.url
+    awayTeamLogoURL = event.awayTeam.logoUrl.url
+    homeScore = event.homeScore.map { "\($0)" } ?? ""
+    awayScore = event.awayScore.map { "\($0)" } ?? ""
 
     homeScoreTextColor = Self.scoreTextColor(for: event, isHome: true)
     awayScoreTextColor = Self.scoreTextColor(for: event, isHome: false)
