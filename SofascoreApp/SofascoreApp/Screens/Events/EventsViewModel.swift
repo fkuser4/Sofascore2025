@@ -26,6 +26,17 @@ class EventsViewModel {
 
       switch result {
       case .success(let events):
+        for event in events {
+          DataPersistenceManager.shared.saveEventWith(model: event) { result in
+            switch result {
+            case .success:
+              break
+            case .failure(let error):
+              print("Error: \(error.localizedDescription) for event \(event.id)")
+            }
+          }
+        }
+
         var grouped = Dictionary(grouping: events) {
           $0.league
         }
@@ -35,6 +46,7 @@ class EventsViewModel {
             $0.startTimestamp < $1.startTimestamp
           }
         }
+
         DispatchQueue.main.async {
           self.currentEvents = grouped
         }

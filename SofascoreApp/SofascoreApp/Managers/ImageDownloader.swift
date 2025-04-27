@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class ImageDownloader {
+final class ImageDownloader {
   static let shared = ImageDownloader()
   let cache: NSCache<NSString, UIImage> = .init()
 

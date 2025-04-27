@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7BB2B1452D866AE300DA3455 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7BB2B1442D866AE300DA3455 /* SnapKit */; };
 		7BB5C7E82D96D9D2004FF594 /* SofaAcademic in Frameworks */ = {isa = PBXBuildFile; productRef = 7BB5C7E72D96D9D2004FF594 /* SofaAcademic */; };
+		7BB7515B2DBAF4D700CDBB46 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7BB7515A2DBAF4D700CDBB46 /* KeychainAccess */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			files = (
 				7BB5C7E82D96D9D2004FF594 /* SofaAcademic in Frameworks */,
 				7BB2B1452D866AE300DA3455 /* SnapKit in Frameworks */,
+				7BB7515B2DBAF4D700CDBB46 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +90,7 @@
 			packageProductDependencies = (
 				7BB2B1442D866AE300DA3455 /* SnapKit */,
 				7BB5C7E72D96D9D2004FF594 /* SofaAcademic */,
+				7BB7515A2DBAF4D700CDBB46 /* KeychainAccess */,
 			);
 			productName = SofascoreApp;
 			productReference = 7B60DE052D7DEA4400976787 /* SofascoreApp.app */;
@@ -120,6 +123,7 @@
 			packageReferences = (
 				7BB2B1432D866AE300DA3455 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				7BB5C7E62D96D9D2004FF594 /* XCRemoteSwiftPackageReference "academy" */,
+				7BB751592DBAF4D700CDBB46 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7B60DE062D7DEA4400976787 /* Products */;
@@ -387,6 +391,14 @@
 				kind = branch;
 			};
 		};
+		7BB751592DBAF4D700CDBB46 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -399,6 +411,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7BB5C7E62D96D9D2004FF594 /* XCRemoteSwiftPackageReference "academy" */;
 			productName = SofaAcademic;
+		};
+		7BB7515A2DBAF4D700CDBB46 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BB751592DBAF4D700CDBB46 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

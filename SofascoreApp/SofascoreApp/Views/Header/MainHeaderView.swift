@@ -17,25 +17,6 @@ class MainHeaderView: BaseView {
   var didTapSettingsButton: (() -> Void)?
   var didTapTrophyButton: (() -> Void)?
 
-  override func styleViews() {
-    backgroundColor = .primaryBackgroundColor
-
-    headerTitleView.image = .icHeaderTitle
-    headerTitleView.contentMode = .scaleAspectFit
-    headerTitleView.tintColor = .textOnPrimaryBackgroundColor
-
-    settingsButton.setBackgroundImage(.icSettings, for: .normal)
-    settingsButton.imageView?.contentMode = .scaleAspectFit
-
-    trophyButton.setBackgroundImage(.icTrophy, for: .normal)
-    trophyButton.imageView?.contentMode = .scaleAspectFit
-  }
-
-  override func setupBinding() {
-    settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
-    trophyButton.addTarget(self, action: #selector(trophyTapped), for: .touchUpInside)
-  }
-
   override func addViews() {
     addSubview(headerTitleView)
     addSubview(settingsButton)
@@ -59,6 +40,25 @@ class MainHeaderView: BaseView {
       make.size.centerY.equalTo(settingsButton)
       make.trailing.equalTo(settingsButton.snp.leading).offset(-24)
     }
+  }
+
+  override func styleViews() {
+    backgroundColor = .primaryBackgroundColor
+
+    headerTitleView.image = .icHeaderTitle
+    headerTitleView.contentMode = .scaleAspectFit
+    headerTitleView.tintColor = .textOnPrimaryBackgroundColor
+
+    settingsButton.setBackgroundImage(.icSettings, for: .normal)
+    settingsButton.imageView?.contentMode = .scaleAspectFit
+
+    trophyButton.setBackgroundImage(.icTrophy, for: .normal)
+    trophyButton.imageView?.contentMode = .scaleAspectFit
+  }
+
+  override func setupBinding() {
+    settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
+    trophyButton.addTarget(self, action: #selector(trophyTapped), for: .touchUpInside)
   }
 
   @objc func settingsTapped() {
