@@ -14,17 +14,22 @@ class SettingsOverviewView: BaseView {
   private var leagueCountLabel: UILabel = .init()
   private var logoutButton: UIButton = .init()
   private var stackView: UIStackView = .init()
-  var didTapLogout: (() -> Void)?
-  func setName(_ text: String) {
-    nameLabel.text = text
-  }
+  private var didTapLogout: (() -> Void)?
 
-  func setEventsCount(_ text: String) {
-    eventsCountLabel.text = text
-  }
+  func configure(with viewModel: SettingsViewModel) {
+    viewModel.nameDidChange = { [weak self] name in
+      self?.nameLabel.text = name
+    }
 
-  func setLeaguesCount(_ text: String) {
-    leagueCountLabel.text = text
+    viewModel.eventsCountDidChange = { [weak self] eventsCount in
+      self?.eventsCountLabel.text = eventsCount
+    }
+
+    viewModel.leaguesCountDidChange = { [weak self] leaguesCount in
+      self?.leagueCountLabel.text = leaguesCount
+    }
+
+    didTapLogout = viewModel.logoutDidTrigger
   }
 
   override func addViews() {

@@ -26,24 +26,25 @@ class LoginView: BaseView {
       loginButton.setTitle("Login", for: .normal)
       [usernameTextField, passwordTextField].forEach {
         $0.layer.borderWidth = 1
+        $0.isUserInteractionEnabled = true
       }
     }
   }
 
-  private var container: UIStackView = .init()
+  private var containerStackView: UIStackView = .init()
 
   override func addViews() {
-    addSubview(container)
+    addSubview(containerStackView)
     [logoImageView, subtitleLabel, invalidLoginView, usernameTextField, passwordTextField, loginButton].forEach {
-      container.addArrangedSubview($0)
+      containerStackView.addArrangedSubview($0)
     }
   }
 
   override func styleViews() {
-    container.axis = .vertical
-    container.alignment = .center
-    container.spacing = 20
-    container.setCustomSpacing(35, after: subtitleLabel)
+    containerStackView.axis = .vertical
+    containerStackView.alignment = .center
+    containerStackView.spacing = 20
+    containerStackView.setCustomSpacing(35, after: subtitleLabel)
 
     logoImageView.image = .icHeaderTitle
     logoImageView.contentMode = .scaleAspectFill
@@ -75,7 +76,7 @@ class LoginView: BaseView {
   }
 
   override func setupConstraints() {
-    container.snp.makeConstraints { make in
+    containerStackView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
 
@@ -112,6 +113,7 @@ class LoginView: BaseView {
     invalidLoginView.isHidden = true
     [usernameTextField, passwordTextField].forEach {
       $0.layer.borderWidth = 0
+      $0.isUserInteractionEnabled = false
     }
 
     didTapLogin?(usernameTextField.text, passwordTextField.text)

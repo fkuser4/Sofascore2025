@@ -7,21 +7,35 @@
 import UIKit
 import CoreData
 
+enum DatabaseError: Error {
+  case deleteFailed
+  case saveFailed
+  case fetchFailed
+}
+
 final class DataPersistenceManager {
   static let shared = DataPersistenceManager()
   private let container: NSPersistentContainer
 
   private init() {
-    container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer // swiftlint:disable:this force_cast
+    container = NSPersistentContainer(name: "SofascoreModel")
+    container.loadPersistentStores { _, error in
+      if let error = error as NSError? {
+        fatalError("Unresolved error \(error), \(error.userInfo)")
+      }
+    }
 
     container.viewContext.automaticallyMergesChangesFromParent = true
     container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
   }
 
-  func saveEventWith(model: Event, completed: @escaping (Result<Void, DatabaseError>) -> Void) {
+  func saveEvents(_ events: [Event], completed: @escaping (Result<Void, DatabaseError>) -> Void) {
     container.performBackgroundTask { context in
       context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-      _ = EventEntity.fromDTO(model, in: context)
+      for event in events {
+        _ = EventEntity.fromDTO(event, in: context)
+      }
+
       do {
         try context.save()
         completed(.success(()))
@@ -79,10 +93,16 @@ final class DataPersistenceManager {
       }
     }
   }
-}
 
-enum DatabaseError: Error {
-  case deleteFailed
-  case saveFailed
-  case fetchFailed
+  private func saveContext () {
+    let context = container.viewContext
+    if context.hasChanges {
+      do {
+        try context.save()
+      } catch {
+        let nserror = error as NSError
+        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+      }
+    }
+  }
 }

@@ -13,7 +13,7 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
   private let safeAreaView: UIView = .init()
   private let titleLabel: UILabel = .init()
   private let settingsOverviewView: SettingsOverviewView = .init()
-  private let settingsOverviewViewModel = SettingsOverviewViewModel()
+  private let settingsViewModel = SettingsViewModel()
   var onDismiss: (() -> Void)?
 
 
@@ -24,7 +24,7 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
     setupConstraints()
     styleViews()
     setupBindings()
-    settingsOverviewViewModel.loadAll()
+    settingsViewModel.loadAll()
   }
 
   func addViews() {
@@ -59,37 +59,14 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
     )
     navBar.configure(with: config)
 
+    settingsOverviewView.configure(with: settingsViewModel)
+
     safeAreaView.backgroundColor = .primaryBackgroundColor
   }
 
   func setupBindings() {
     navBar.didTapBackButton = { [weak self] in
       self?.onDismiss?()
-    }
-
-    settingsOverviewViewModel.nameDidChange = { [weak settingsOverviewView] text in
-      settingsOverviewView?.setName(text) }
-
-    settingsOverviewViewModel.eventsDidChange = { [weak settingsOverviewView] text in
-      settingsOverviewView?.setEventsCount(text)
-    }
-
-    settingsOverviewViewModel.leaguesDidChange = { [weak settingsOverviewView] text in
-      settingsOverviewView?.setLeaguesCount(text)
-    }
-
-    settingsOverviewView.didTapLogout = {
-      DataPersistenceManager.shared.deleteAllObjects { result in
-        switch result {
-        case .success:
-          break
-        case .failure(let error):
-          print("Error deleting events: \(error)")
-        }
-      }
-      UserDefaults.standard.set(nil, forKey: "name")
-      AuthService.shared.logout()
-      AppRouter.shared.showLogin(animated: true)
     }
   }
 }

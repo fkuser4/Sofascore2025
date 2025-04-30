@@ -26,14 +26,12 @@ class EventsViewModel {
 
       switch result {
       case .success(let events):
-        for event in events {
-          DataPersistenceManager.shared.saveEventWith(model: event) { result in
-            switch result {
-            case .success:
-              break
-            case .failure(let error):
-              print("Error: \(error.localizedDescription) for event \(event.id)")
-            }
+        DataPersistenceManager.shared.saveEvents(events) { result in
+          switch result {
+          case .success:
+            break
+          case .failure(let error):
+            print("Error: \(error.localizedDescription)")
           }
         }
 

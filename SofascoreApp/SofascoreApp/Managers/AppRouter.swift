@@ -36,9 +36,9 @@ final class AppRouter {
     swapRoot(to: UINavigationController(rootViewController: loginViewController), animated: true)
   }
 
-  private func swapRoot(to vc: UIViewController, animated: Bool) { // swiftlint:disable:this identifier_name
+  private func swapRoot(to viewController: UIViewController, animated: Bool) {
     guard let window = self.window else { return }
-    let change = { window.rootViewController = vc }
+    let change = { window.rootViewController = viewController }
     if animated {
       UIView.transition(
         with: window,

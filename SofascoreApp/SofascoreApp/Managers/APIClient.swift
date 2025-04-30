@@ -6,6 +6,15 @@
 //
 import Foundation
 
+enum APIError: Error {
+  case networkError
+  case invalidSport
+  case invalidResponse
+  case invalidData
+  case unauthorized
+  case serverError(status: Int)
+}
+
 final class APIClient {
   static let shared = APIClient()
   private let baseURLString = "https://sofa-ios-academy-43194eec0621.herokuapp.com"
@@ -52,7 +61,10 @@ final class APIClient {
 
   func getEvents(sportType: SportType, completed: @escaping (Result<[Event], APIError>) -> Void) {
     let endpoint = baseURLString + "/secure/events?sport=\(sportType.param)"
-    let accessToken = AuthService.shared.accessToken ?? ""
+    guard let accessToken = AuthService.shared.accessToken else {
+      completed(.failure(.unauthorized))
+      return
+    }
 
     guard let url = URL(string: endpoint) else {
       completed(.failure(.invalidSport))
@@ -87,13 +99,4 @@ final class APIClient {
     }
     task.resume()
   }
-}
-
-enum APIError: Error {
-  case networkError
-  case invalidSport
-  case invalidResponse
-  case invalidData
-  case unauthorized
-  case serverError(status: Int)
 }
