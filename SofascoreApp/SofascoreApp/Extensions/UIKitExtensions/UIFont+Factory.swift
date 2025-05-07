@@ -19,5 +19,9 @@ extension UIFont {
   static func light(size: CGFloat) -> UIFont {
     return UIFont(name: "Roboto-Light", size: size)!
   }
+
+  static func medium(size: CGFloat) -> UIFont {
+    return UIFont(name: "Roboto-Medium", size: size)!
+  }
   // swiftlint:enable force_unwrapping
 }

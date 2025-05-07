@@ -13,9 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     self.window = UIWindow(frame: UIScreen.main.bounds)
-    let rootVC: UINavigationController = .init(rootViewController: MainViewController())
-    window?.rootViewController = rootVC
-    window?.makeKeyAndVisible()
+
+    AppRouter.shared.start(window: self.window!) // swiftlint:disable:this force_unwrapping
+    _ = DataPersistenceManager.shared
+
     return true
   }
 }

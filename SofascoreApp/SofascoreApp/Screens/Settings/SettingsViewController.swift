@@ -11,8 +11,11 @@ import SofaAcademic
 class SettingsViewController: UIViewController, BaseViewProtocol {
   private let navBar = NavigationBarView()
   private let safeAreaView: UIView = .init()
-  var onDismiss: (() -> Void)?
   private let titleLabel: UILabel = .init()
+  private let settingsOverviewView: SettingsOverviewView = .init()
+  private let settingsViewModel = SettingsViewModel()
+  var onDismiss: (() -> Void)?
+
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -21,11 +24,13 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
     setupConstraints()
     styleViews()
     setupBindings()
+    settingsViewModel.loadAll()
   }
 
   func addViews() {
     view.addSubview(safeAreaView)
     view.addSubview(navBar)
+    view.addSubview(settingsOverviewView)
   }
 
   func setupConstraints() {
@@ -39,6 +44,11 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
       make.top.equalTo(view.safeAreaLayoutGuide)
       make.leading.trailing.equalToSuperview()
     }
+
+    settingsOverviewView.snp.makeConstraints { make in
+      make.top.equalTo(navBar.snp.bottom).offset(15)
+      make.leading.trailing.equalToSuperview()
+    }
   }
 
   func styleViews() {
@@ -48,6 +58,8 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
       backgroundColor: .primaryBackgroundColor
     )
     navBar.configure(with: config)
+
+    settingsOverviewView.configure(with: settingsViewModel)
 
     safeAreaView.backgroundColor = .primaryBackgroundColor
   }
