@@ -18,6 +18,7 @@ extension EventEntity {
     entity.league = LeagueEntity.fromDTO(dto.league, in: context)
     entity.homeTeam = TeamEntity.fromDTO(dto.homeTeam, in: context)
     entity.awayTeam = TeamEntity.fromDTO(dto.awayTeam, in: context)
+    entity.round = Int32(dto.round)
 
     return entity
   }

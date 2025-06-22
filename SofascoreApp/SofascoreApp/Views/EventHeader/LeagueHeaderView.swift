@@ -14,6 +14,7 @@ class LeagueHeaderView: BaseView {
 
   func configure(with leagueHeaderViewModel: LeagueHeaderViewModel?) {
     if let leagueHeaderViewModel = leagueHeaderViewModel {
+      leagueLogoImageView.image = .leagueLogoPlaceholder
       leagueLogoImageView.loadImage(from: leagueHeaderViewModel.logoURL)
       leagueTitleView.configure(
         leagueName: leagueHeaderViewModel.leagueName,

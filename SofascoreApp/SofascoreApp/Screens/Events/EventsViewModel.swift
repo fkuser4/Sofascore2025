@@ -6,51 +6,36 @@
 //
 import UIKit
 
-class EventsViewModel {
-  private(set) var currentEvents: [League: [Event]] = [:] {
-    didSet {
-      onCurrentEventsChanged?()
-    }
-  }
-  private(set) var selectedSport: SportType?
-  var displayedLeagues: [League] {
-    return currentEvents.keys.sorted { $0.name < $1.name }
-  }
-
-  var onCurrentEventsChanged: (() -> Void)?
+final class EventsViewModel: BaseLoadableViewModel<[EventSectionGroup<League>]> {
+  private(set) var selectedSport: SportType
 
   func selectSport(_ sport: SportType) {
-    selectedSport = sport
-    APIClient.shared.getEvents(sportType: sport) { [weak self] result in
-      guard let self = self else { return }
+    self.selectedSport = sport
+    loadData()
+  }
 
-      switch result {
-      case .success(let events):
-        DataPersistenceManager.shared.saveEvents(events) { result in
-          switch result {
-          case .success:
-            break
-          case .failure(let error):
-            print("Error: \(error.localizedDescription)")
+  init(initialSport: SportType) {
+    self.selectedSport = initialSport
+  }
+
+  override func loadData() {
+    performLoad { completion in
+      APIClient.shared.getEvents(sportType: self.selectedSport) { result in
+        switch result {
+        case .success(let events):
+          let groupedByLeague = Dictionary(grouping: events) { $0.league }
+
+          let sections = groupedByLeague.map { league, events -> EventSectionGroup<League> in
+            let sortedEvents = events.sorted { $0.startTimestamp < $1.startTimestamp }
+            return EventSectionGroup<League>(header: league, events: sortedEvents)
           }
-        }
 
-        var grouped = Dictionary(grouping: events) {
-          $0.league
-        }
+          let sortedSections = sections.sorted { $0.header.name < $1.header.name }
+          completion(.success(sortedSections))
 
-        for (league, events) in grouped {
-          grouped[league] = events.sorted {
-            $0.startTimestamp < $1.startTimestamp
-          }
+        case .failure(let error):
+          completion(.failure(error))
         }
-
-        DispatchQueue.main.async {
-          self.currentEvents = grouped
-        }
-
-      case .failure(let error):
-        print("Error: \(error.localizedDescription)")
       }
     }
   }

@@ -9,11 +9,9 @@ import SnapKit
 import SofaAcademic
 
 final class MainViewController: UIViewController, BaseViewProtocol {
-  private let sportSelectorView = SportSelectorView()
+  private let tabBarView = TabBarView()
   private let sportTypes: [SportType] = [.football, .basketball, .americanFootball]
-  private let initialSport: SportType = .football
-  private let containerView = UIView()
-  private let eventsViewModel: EventsViewModel = .init()
+  private let eventsViewModel: EventsViewModel = .init(initialSport: .football)
   private lazy var eventsVC = EventsViewController(viewModel: eventsViewModel)
   private let safeAreaView: UIView = .init()
   private let headerView = MainHeaderView()
@@ -25,24 +23,26 @@ final class MainViewController: UIViewController, BaseViewProtocol {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .contentBackground
 
     addViews()
     setupConstraints()
     setupBindings()
     styleViews()
-    sportSelectorView.configure(with: sportTypes, initialSport: initialSport)
-    eventsViewModel.selectSport(initialSport)
+
+    let items = sportTypes.map { sport in
+      TabBarItem(title: sport.title, iconName: sport.iconName)
+    }
+    tabBarView.configure(with: items)
   }
 
   func addViews() {
     view.addSubview(safeAreaView)
     view.addSubview(headerView)
-    view.addSubview(sportSelectorView)
-    view.addSubview(containerView)
+    view.addSubview(tabBarView)
 
     addChild(eventsVC)
-    containerView.addSubview(eventsVC.view)
+    view.addSubview(eventsVC.view)
     eventsVC.didMove(toParent: self)
   }
 
@@ -58,18 +58,14 @@ final class MainViewController: UIViewController, BaseViewProtocol {
       $0.leading.trailing.equalToSuperview()
     }
 
-    sportSelectorView.snp.makeConstraints {
+    tabBarView.snp.makeConstraints {
       $0.top.equalTo(headerView.snp.bottom)
       $0.leading.trailing.equalToSuperview()
     }
 
-    containerView.snp.makeConstraints {
-      $0.top.equalTo(sportSelectorView.snp.bottom)
-      $0.leading.trailing.bottom.equalToSuperview()
-    }
-
     eventsVC.view.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(tabBarView.snp.bottom)
+      $0.leading.trailing.bottom.equalToSuperview()
     }
   }
 
@@ -78,9 +74,10 @@ final class MainViewController: UIViewController, BaseViewProtocol {
   }
 
   private func setupBindings() {
-    sportSelectorView.onTap = { [weak self] sport in
+    tabBarView.onItemSelected = { [weak self] selectedIndex in
       guard let self = self else { return }
-      self.eventsViewModel.selectSport(sport)
+      let selectedSport = self.sportTypes[selectedIndex]
+      self.eventsViewModel.selectSport(selectedSport)
     }
 
     headerView.didTapSettingsButton = { [weak self] in

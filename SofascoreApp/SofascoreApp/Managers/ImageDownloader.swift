@@ -13,12 +13,25 @@ final class ImageDownloader {
   private init() {}
 
   func downloadImage(url: URL, completed: @escaping (UIImage?) -> Void) {
-    let urlString = url.absoluteString
+    downloadImage(from: url.absoluteString, completed: completed)
+  }
 
+  func downloadCountryFlag(for countryName: String, completed: @escaping (UIImage?) -> Void) {
+    guard let countryCode = CountryCodeProvider.code(for: countryName) else {
+      completed(nil)
+      return
+    }
+
+    let urlString = "https://flagcdn.com/w160/\(countryCode).png"
+
+    downloadImage(from: urlString, completed: completed)
+  }
+
+  private func downloadImage(from urlString: String, completed: @escaping (UIImage?) -> Void) {
     let cacheKey = NSString(string: urlString)
 
-    if let image = cache.object(forKey: cacheKey) {
-      completed(image)
+    if let cachedImage = cache.object(forKey: cacheKey) {
+      completed(cachedImage)
       return
     }
 
@@ -31,9 +44,11 @@ final class ImageDownloader {
       guard
         let self = self,
         error == nil,
-        let response = response as? HTTPURLResponse, response.statusCode == 200,
+        let httpResponse = response as? HTTPURLResponse,
+        httpResponse.statusCode == 200,
         let data = data,
-        let image = UIImage(data: data) else {
+        let image = UIImage(data: data)
+      else {
         completed(nil)
         return
       }
@@ -41,6 +56,7 @@ final class ImageDownloader {
       self.cache.setObject(image, forKey: cacheKey)
       completed(image)
     }
+
     task.resume()
   }
 }

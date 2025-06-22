@@ -44,7 +44,7 @@ class LoginViewController: UIViewController, BaseViewProtocol {
             username: username?.trimmingCharacters(in: .whitespaces) ?? "",
             password: password?.trimmingCharacters(in: .whitespaces) ?? ""
           )
-          AppRouter.shared.showMain(animated: true)
+          AppRouter.shared.showMain(animated: false)
         } catch let apiError as APIError {
           self?.loginView.errorMessage = apiError.localizedDescription
         } catch {

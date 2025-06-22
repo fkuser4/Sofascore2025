@@ -13,6 +13,7 @@ class TeamView: BaseView {
   private var teamNameLabel: UILabel = .init()
 
   func configure(teamLogoUrl: URL?, teamName: String?, textColor: UIColor?) {
+    teamLogoImageView.image = .teamLogoPlaceholder
     teamLogoImageView.loadImage(from: teamLogoUrl)
 
     teamNameLabel.text = teamName

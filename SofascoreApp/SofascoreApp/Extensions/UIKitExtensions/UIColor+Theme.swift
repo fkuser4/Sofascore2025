@@ -15,10 +15,12 @@ extension UIColor {
   static let secondaryBackgroundColor = UIColor(hex: "#FFFFFF")
   static let backIconOnWhite = UIColor(hex: "#121212")
   static let backIconOnBlue = UIColor(hex: "#FFFFFF")
-  static let eventDetailsBackgroundColor = UIColor(hex: "#EFF3F8")
+  static let contentBackground = UIColor(hex: "#EFF3F8")
   static let loginInputTextFieldBackgroundColor: UIColor = white.withAlphaComponent(0.2)
   static let loginSubtitle = white.withAlphaComponent(0.8)
   static let loginInputTextPlaceholder: UIColor = white.withAlphaComponent(0.6)
   static let loginErrorBackground = UIColor(hex: "#EF4444").withAlphaComponent(0.2)
   static let loginErrorBorder = UIColor(hex: "#EF4444").withAlphaComponent(0.5)
+  static let periodIncidentBackground = UIColor(hex: "#F7F6EF")
+  static let teamPostionBackground = UIColor(hex: "#F0EEDF")
 }

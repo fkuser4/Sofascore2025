@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24D81" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
-    <entity name="CountryEntity" representedClassName="CountryEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="league" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LeagueEntity" inverseName="country" inverseEntity="LeagueEntity"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
-    </entity>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="EventEntity" representedClassName="EventEntity" syncable="YES" codeGenerationType="class">
         <attribute name="awayScore" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="homeScore" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="round" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="startTimestamp" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" optional="YES" attributeType="String"/>
         <relationship name="awayTeam" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TeamEntity" inverseName="awayEvent" inverseEntity="TeamEntity"/>
@@ -26,10 +17,11 @@
         </uniquenessConstraints>
     </entity>
     <entity name="LeagueEntity" representedClassName="LeagueEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="logoUrl" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="country" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CountryEntity" inverseName="league" inverseEntity="CountryEntity"/>
+        <attribute name="seasonId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventEntity" inverseName="league" inverseEntity="EventEntity"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
