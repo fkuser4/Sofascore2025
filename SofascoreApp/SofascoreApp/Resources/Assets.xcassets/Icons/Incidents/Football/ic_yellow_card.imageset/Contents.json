@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_foul.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

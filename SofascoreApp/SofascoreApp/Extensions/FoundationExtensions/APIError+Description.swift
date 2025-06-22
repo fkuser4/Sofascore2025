@@ -11,16 +11,20 @@ extension APIError: LocalizedError {
     switch self {
     case .networkError:
       return "Unable to complete your request. Please check your internet connection."
-    case .invalidSport:
-      return "Selected sport is not supported."
+    case .invalidURL:
+      return "Invalid request URL."
     case .invalidResponse:
       return "Invalid response from the server. Please try again."
     case .invalidData:
       return "The data received from the server was invalid. Please try again."
-    case .unauthorized:
+    case .invalidLogin:
       return "Username or password is incorrect."
     case .serverError(let status):
       return "Server error occurred (code \(status)). Please try again later."
+    case .unauthorized:
+      return "You have to log in to use this feature."
+    case .notFound:
+      return "The requested resource was not found."
     }
   }
 }

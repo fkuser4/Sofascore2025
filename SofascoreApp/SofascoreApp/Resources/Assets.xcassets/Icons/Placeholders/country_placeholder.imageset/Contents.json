@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_country_placeholder_no_padding40x40@3x.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

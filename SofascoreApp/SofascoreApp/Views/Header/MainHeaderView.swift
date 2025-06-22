@@ -52,7 +52,7 @@ class MainHeaderView: BaseView {
     settingsButton.setBackgroundImage(.icSettings, for: .normal)
     settingsButton.imageView?.contentMode = .scaleAspectFit
 
-    trophyButton.setBackgroundImage(.icTrophy, for: .normal)
+    trophyButton.setBackgroundImage(.icTrophyCup, for: .normal)
     trophyButton.imageView?.contentMode = .scaleAspectFit
   }
 

@@ -21,8 +21,13 @@ class EventDetailsHeaderView: BaseView {
   private var matchStartDateLabel: UILabel = .init()
   private var matchTimeLabel: UILabel = .init()
 
+  private var currentViewModel: EventDetailsHeaderViewModel?
+
+  var onTeamTap: ((Team) -> Void)?
 
   func configure(with viewModel: EventDetailsHeaderViewModel) {
+    currentViewModel = viewModel
+
     homeTeamLogoImageView.loadImage(from: viewModel.homeTeamLogoURL)
     awayTeamLogoImageView.loadImage(from: viewModel.awayTeamLogoURL)
 
@@ -79,6 +84,11 @@ class EventDetailsHeaderView: BaseView {
     matchStartDateLabel.font = .bodyLight
 
     matchTimeLabel.font = .bodyLight
+
+    homeTeamLogoImageView.isUserInteractionEnabled = true
+    homeTeamLabel.isUserInteractionEnabled = true
+    awayTeamLogoImageView.isUserInteractionEnabled = true
+    awayTeamLabel.isUserInteractionEnabled = true
   }
 
   override func setupConstraints() {
@@ -96,14 +106,14 @@ class EventDetailsHeaderView: BaseView {
     homeTeamLabel.snp.makeConstraints { make in
       make.centerX.equalTo(homeTeamLogoImageView)
       make.top.equalTo(homeTeamLogoImageView.snp.bottom).offset(8)
-      make.bottom.lessThanOrEqualToSuperview().inset(15)
+      make.bottom.equalToSuperview().inset(15)
       make.leading.greaterThanOrEqualToSuperview().inset(16)
     }
 
     awayTeamLabel.snp.makeConstraints { make in
       make.centerX.equalTo(awayTeamLogoImageView)
       make.centerY.equalTo(homeTeamLabel)
-      make.bottom.lessThanOrEqualToSuperview().inset(15)
+      make.bottom.equalToSuperview().inset(15)
       make.trailing.lessThanOrEqualToSuperview().inset(16)
     }
 
@@ -112,5 +122,29 @@ class EventDetailsHeaderView: BaseView {
       make.leading.greaterThanOrEqualTo(homeTeamLabel.snp.trailing)
       make.trailing.lessThanOrEqualTo(awayTeamLabel.snp.leading)
     }
+  }
+
+  override func setupGestureRecognizers() {
+    let homeLogoTap = UITapGestureRecognizer(target: self, action: #selector(homeTapped))
+    let homeLabelTap = UITapGestureRecognizer(target: self, action: #selector(homeTapped))
+
+    homeTeamLogoImageView.addGestureRecognizer(homeLogoTap)
+    homeTeamLabel.addGestureRecognizer(homeLabelTap)
+
+    let awayLogoTap = UITapGestureRecognizer(target: self, action: #selector(awayTapped))
+    let awayLabelTap = UITapGestureRecognizer(target: self, action: #selector(awayTapped))
+
+    awayTeamLogoImageView.addGestureRecognizer(awayLogoTap)
+    awayTeamLabel.addGestureRecognizer(awayLabelTap)
+  }
+
+  @objc private func homeTapped() {
+    guard let team = currentViewModel?.event.homeTeam else { return }
+    onTeamTap?(team)
+  }
+
+  @objc private func awayTapped() {
+    guard let team = currentViewModel?.event.awayTeam else { return }
+    onTeamTap?(team)
   }
 }

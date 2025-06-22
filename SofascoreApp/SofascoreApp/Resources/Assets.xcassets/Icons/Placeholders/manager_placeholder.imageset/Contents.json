@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "manager_photo_placeholder40x40@3x.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

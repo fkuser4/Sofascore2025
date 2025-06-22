@@ -15,7 +15,7 @@ class EventView: BaseView {
   private let timeView: TimeView = .init()
   private var homeScore = UILabel()
   private var awayScore = UILabel()
-  private let leftBorderView: UIView = .init()
+  private let cellDividerView: CellDividerView = .init()
 
   func configure(with eventViewModel: EventViewModel?) {
     if let eventViewModel = eventViewModel {
@@ -53,7 +53,7 @@ class EventView: BaseView {
     addSubview(timeView)
     addSubview(homeScore)
     addSubview(awayScore)
-    addSubview(leftBorderView)
+    addSubview(cellDividerView)
   }
 
   override func styleViews() {
@@ -62,8 +62,6 @@ class EventView: BaseView {
 
     homeScore.setContentCompressionResistancePriority(.required, for: .horizontal)
     awayScore.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-    leftBorderView.backgroundColor = .secondary
   }
 
   override func setupConstraints() {
@@ -74,22 +72,21 @@ class EventView: BaseView {
       make.width.equalTo(64)
     }
 
-    leftBorderView.snp.makeConstraints { make in
+    cellDividerView.snp.makeConstraints { make in
       make.leading.equalTo(timeView.snp.trailing)
       make.top.bottom.equalToSuperview().inset(8)
-      make.width.equalTo(1)
     }
 
     homeTeam.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(10)
-      make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
+      make.leading.equalTo(cellDividerView.snp.trailing).offset(16)
       make.trailing.lessThanOrEqualTo(homeScore.snp.leading).offset(-16)
     }
 
     awayTeam.snp.makeConstraints { make in
       make.bottom.equalToSuperview().inset(10)
       make.top.equalTo(homeTeam.snp.bottom).offset(4)
-      make.leading.equalTo(leftBorderView.snp.trailing).offset(16)
+      make.leading.equalTo(cellDividerView.snp.trailing).offset(16)
       make.trailing.lessThanOrEqualTo(awayScore.snp.leading).offset(-16)
     }
 

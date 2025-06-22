@@ -13,8 +13,8 @@ extension LeagueEntity {
     entity.id = Int64(dto.id)
     entity.name = dto.name
     entity.logoUrl = dto.logoUrl
-    entity.country = CountryEntity.fromDTO(dto.country, in: context)
-    entity.id = Int64(dto.id)
+    entity.country = dto.country.name
+    entity.seasonId = Int32(dto.seasonId)
 
     return entity
   }

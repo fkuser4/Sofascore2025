@@ -8,60 +8,14 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-final class EventsViewController: UIViewController, BaseViewProtocol {
-  private let viewModel: EventsViewModel
-  private let emptyStateView = EmptyStateView()
-
-  private lazy var collectionView: UICollectionView = {
-    let layout = createCompositionalLayout()
-    return UICollectionView(frame: .zero, collectionViewLayout: layout)
-  }()
-
-  init(viewModel: EventsViewModel) {
-    self.viewModel = viewModel
-    super.init(nibName: nil, bundle: nil)
-
-    viewModel.onCurrentEventsChanged = { [weak self] in
-      guard let self = self else { return }
-      self.collectionView.backgroundView?.isHidden = !self.viewModel.currentEvents.isEmpty
-      self.collectionView.reloadData()
-    }
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
+final class EventsViewController: BaseLoadableCollectionViewController<EventsViewModel, EventsSectionViewModel> {
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
-
-    setupCollectionView()
-    addViews()
-    styleViews()
-    setupConstraints()
-
-    collectionView.backgroundView?.isHidden = !viewModel.currentEvents.isEmpty
-    collectionView.reloadData()
+    collectionView.delegate = self
+    collectionView.dataSource = self
   }
 
-  func addViews() {
-    view.addSubview(collectionView)
-    collectionView.backgroundView = emptyStateView
-  }
-
-  func styleViews() {
-    collectionView.backgroundColor = .white
-    emptyStateView.setMessageText("No events available for this sport.")
-  }
-
-  func setupConstraints() {
-    collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
-  }
-
-  private func setupCollectionView() {
+  override func registerCells() {
     collectionView.register(
       EventCollectionViewCell.self,
       forCellWithReuseIdentifier: EventCollectionViewCell.reuseIdentifier)
@@ -72,29 +26,46 @@ final class EventsViewController: UIViewController, BaseViewProtocol {
       withReuseIdentifier: LeagueHeaderCollectionReusableView.reuseIdentifier)
 
     collectionView.register(
-      SectionDividerView.self,
+      EventSectionDividerView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-      withReuseIdentifier: SectionDividerView.reuseIdentifier)
-
-    collectionView.dataSource = self
-    collectionView.delegate = self
+      withReuseIdentifier: EventSectionDividerView.reuseIdentifier)
   }
 
-  private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-    return UICollectionViewCompositionalLayout { _, _ in
-      return CompositionalLayoutHelper.createPinnedHeaderListSectionWithFooter()
+  override func configureLayout() {
+    collectionView.collectionViewLayout = CompositionalLayoutHelper.createEventsLayout()
+  }
+
+  override func handleDataLoaded(_ data: [EventSectionGroup<League>]) {
+    dataItems = data.map { sectionGroup in
+      let eventViewModels = sectionGroup.events.map { event in
+        EventViewModel(event: event)
+      }
+      return EventsSectionViewModel(
+        league: sectionGroup.header,
+        eventViewModels: eventViewModels
+      )
     }
+  }
+
+  private func handleLeagueTap(league: League) {
+    let leagueDetailsViewModel = LeagueDetailsViewModel(league: league, sport: viewModel.selectedSport)
+    let leagueDetailsVC = LeagueDetailsViewController(viewModel: leagueDetailsViewModel)
+
+    leagueDetailsVC.onDismiss = { [weak self] in
+      self?.navigationController?.popViewController(animated: true)
+    }
+
+    navigationController?.pushViewController(leagueDetailsVC, animated: true)
   }
 }
 
 extension EventsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return viewModel.displayedLeagues.count
+    return dataItems.count
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    let league = viewModel.displayedLeagues[section]
-    return viewModel.currentEvents[league]?.count ?? 0
+    return dataItems[section].eventViewModels.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -105,14 +76,8 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
       return UICollectionViewCell()
     }
 
-    let league = viewModel.displayedLeagues[indexPath.section]
-
-    guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
-      return cell
-    }
-
-    let event = events[indexPath.item]
-    cell.configure(with: EventViewModel(event: event))
+    let eventViewModel = dataItems[indexPath.section].eventViewModels[indexPath.item]
+    cell.configure(with: eventViewModel)
     return cell
   }
 
@@ -126,17 +91,26 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
         return UICollectionReusableView()
       }
 
-      let league = viewModel.displayedLeagues[indexPath.section]
+      let league = dataItems[indexPath.section].league
       headerView.configure(with: LeagueHeaderViewModel(league: league))
+
+      headerView.onTap = { [weak self] tappedLeague in
+        self?.handleLeagueTap(league: tappedLeague)
+      }
+
       return headerView
     } else if kind == UICollectionView.elementKindSectionFooter {
       guard let divider = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        withReuseIdentifier: SectionDividerView.reuseIdentifier,
+        withReuseIdentifier: EventSectionDividerView.reuseIdentifier,
         for: indexPath
-      ) as? SectionDividerView else {
+      ) as? EventSectionDividerView else {
         return UICollectionReusableView()
       }
+
+      let isLastSection = indexPath.section == dataItems.count - 1
+      divider.configure(lineIsVisible: !isLastSection)
+
       return divider
     }
 
@@ -144,20 +118,14 @@ extension EventsViewController: UICollectionViewDataSource, UICollectionViewDele
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let league = viewModel.displayedLeagues[indexPath.section]
-    guard let events = viewModel.currentEvents[league], indexPath.item < events.count else {
-      return
-    }
-    let event = events[indexPath.item]
+    let eventViewModel = dataItems[indexPath.section].eventViewModels[indexPath.item]
 
-    let eventDetailsVC: EventDetailsViewController = .init()
-    eventDetailsVC.event = event
-    eventDetailsVC.sport = viewModel.selectedSport?.title ?? ""
+    let eventDetailsViewModel = EventDetailsViewModel(event: eventViewModel.event, sport: viewModel.selectedSport)
+    let eventDetailsVC = EventDetailsViewController(viewModel: eventDetailsViewModel)
     eventDetailsVC.onDismiss = { [weak self] in
       self?.navigationController?.popViewController(animated: true)
     }
-    navigationController?.pushViewController(eventDetailsVC, animated: true)
 
-    print("item at \(indexPath.section)/\(indexPath.item) tapped")
+    navigationController?.pushViewController(eventDetailsVC, animated: true)
   }
 }

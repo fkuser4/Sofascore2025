@@ -17,6 +17,7 @@ final class EventCollectionViewCell: UICollectionViewCell {
     eventView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
+    backgroundColor = .white
   }
 
   required init?(coder: NSCoder) {
@@ -30,17 +31,5 @@ final class EventCollectionViewCell: UICollectionViewCell {
   override func prepareForReuse() {
     super.prepareForReuse()
     eventView.configure(with: nil)
-  }
-
-  override var isSelected: Bool {
-    didSet {
-      if isSelected {
-        UIView.animate(withDuration: 0.1, animations: {
-          self.backgroundColor = .systemGray5
-        }, completion: { _ in
-          self.backgroundColor = .white
-        })
-      }
-    }
   }
 }

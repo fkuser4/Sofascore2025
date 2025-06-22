@@ -7,6 +7,8 @@
 import UIKit
 
 class EventDetailsHeaderViewModel {
+  var event: Event
+
   var matchTime: String
   var matchTimeColor: UIColor
 
@@ -29,6 +31,8 @@ class EventDetailsHeaderViewModel {
   var matchStartDate: String
 
   init(event: Event) {
+    self.event = event
+
     homeTeamName = event.homeTeam.name
     awayTeamName = event.awayTeam.name
 
